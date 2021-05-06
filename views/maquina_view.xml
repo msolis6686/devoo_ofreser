@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="ofreser_maquina_form_view" model="ir.ui.view">
+            <field name="name">ofreser.maquina_form_view</field>
+            <field name="model">ofreser.maquina</field>
+            <field name="arch" type="xml">
+              <form string="Usuarios">
+                <group>
+                  <field name="name"/>
+                  <field name="responsable_id"/>
+                </group>
+              </form>
+            </field>
+        </record>
+
+        <record id="ofreser_maquina_tree_view" model="ir.ui.view">
+            <field name="name">ofreser.maquina_tree_view</field>
+            <field name="model">ofreser.maquina</field>
+            <field name="arch" type="xml">
+              <tree string="Usuarios" editable="bottom">
+                <field name="name"/>
+                <field name="responsable_id"/>
+              </tree>
+            </field>
+        </record>
+
+        <record id="ofreser_maquina_action" model="ir.actions.act_window">
+            <field name="name">Máquina</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">ofreser.maquina</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+        </record>
+
+        <menuitem id="menu_maquina_menu"
+                  name="Máquinas"
+                  parent="menu_orden_de_trabajo_configuracion"
+                  action="ofreser_maquina_action"
+                  sequence="10" />
+
+    </data>
+</odoo>

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="liquidacion_en_lote">
+        <t t-call="report.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <!-- <t t-call="report.external_layout"> -->
+                    <div class="page">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-xs-1">
+                                        <img src='/web/binary/company_logo' style="width: 120%;float: left;"/>
+                                </div>
+                                <div class="col-xs-11" >
+                                    <h1>Liquidación</h1>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12" >
+                                    <p>Operador: <span><t t-esc="doc.operador_id.name"/> </span></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <p>Desde: <t t-esc="doc.fecha_desde"  t-options="{'widget': 'date'}"/> </p>
+                                </div>
+                                <div class="col-xs-3">
+                                    <p>Hasta:<t t-esc="doc.fecha_hasta" t-options="{'widget': 'date'}"/></p>
+                                </div>
+                            </div>
+                            <p>Fecha de Liquidacion: <t t-esc="doc.fecha_liquidacion" t-options="{'widget': 'date'}"/></p>
+                            <table class="table">
+                                <thead>
+                                    <th>Orden</th>
+                                    <th>Cliente</th>
+                                    <th>Domicilio</th>
+                                    <th>Factura</th>
+                                    <th>Fecha Servicio</th>
+                                    <th>Tipo de Trabajo</th>
+                                    <th>Monto</th>
+                                    <th>%</th>
+                                    <th>Por Mano de Obra</th>
+                                    <th>%</th>
+                                    <th>Por Máquina</th>
+                                    <th>%</th>
+                                    <th>Por Movilidad</th>
+                                    <th>%</th>
+                                    <th>Por Promoción</th>
+                                    <th>Por Extras</th>
+                                    <th>Total</th>
+                                </thead>
+                                <tbody>
+                                    <t t-set="sum_mo" t-value="0"/>
+                                    <t t-set="sum_maq" t-value="0"/>
+                                    <t t-set="sum_mov" t-value="0"/>
+                                    <t t-set="sum_ext" t-value="0"/>
+                                    <t t-set="sum_prm" t-value="0"/>
+                                    <t t-set="sum_tot" t-value="0"/>
+                                    <t t-foreach="doc.liquidacion_ids" t-as="liquidacion">
+                                        <tr>
+                                            <td><t t-esc="liquidacion.liquidacion_id.orden_de_trabajo_id.numero_comprobante"/></td>
+                                            <td><t t-esc="liquidacion.cliente_id.name"/></td>
+                                            <td><t t-esc="liquidacion.domicilio"/></td>
+                                            <td><t t-esc="liquidacion.factura"/></td>
+                                            <td><t t-esc="liquidacion.fecha" t-options="{'widget': 'date'}"/></td>
+                                            <td><t t-esc="liquidacion.liquidacion_id.orden_de_trabajo_id.tipos_de_trabajo_display"/></td>
+                                            <td><t t-esc="liquidacion.liquidacion_id.orden_de_trabajo_id.precio"/></td>
+                                            <td><t t-esc="liquidacion.porcentaje_num_mano_de_obra"/></td>
+                                            <td><t t-esc="'{:,.2f}'.format(liquidacion.porcentaje_mano_de_obra).replace('.','|').replace(',','.').replace('|',',')"/></td>
+                                            <td><t t-esc="liquidacion.porcentaje_num_maquina"/></td>
+                                            <td><t t-esc="'{:,.2f}'.format(liquidacion.porcentaje_maquina).replace('.','|').replace(',','.').replace('|',',')"/></td>
+                                            <td><t t-esc="liquidacion.porcentaje_num_movilidad"/></td>
+                                            <td><t t-esc="'{:,.2f}'.format(liquidacion.porcentaje_movilidad).replace('.','|').replace(',','.').replace('|',',')"/></td>
+                                            <td><t t-esc="liquidacion.porcentaje_num_promocion"/></td>
+                                            <td><t t-esc="'{:,.2f}'.format(liquidacion.porcentaje_promocion).replace('.','|').replace(',','.').replace('|',',')"/></td>
+                                            <td><t t-esc="'{:,.2f}'.format(liquidacion.porcentaje_extra).replace('.','|').replace(',','.').replace('|',',')"/></td>
+                                            <td><t t-esc="'{:,.2f}'.format(liquidacion.total_a_pagar).replace('.','|').replace(',','.').replace('|',',')"/></td>
+                                        </tr>
+                                        <t t-set="sum_mo" t-value="sum_mo + liquidacion.porcentaje_mano_de_obra"/>
+                                        <t t-set="sum_maq" t-value="sum_maq + liquidacion.porcentaje_maquina"/>
+                                        <t t-set="sum_mov" t-value="sum_mov + liquidacion.porcentaje_movilidad"/>
+                                        <t t-set="sum_prm" t-value="sum_prm + liquidacion.porcentaje_promocion"/>
+                                        <t t-set="sum_ext" t-value="sum_ext + liquidacion.porcentaje_extra"/>
+                                        <t t-set="sum_tot" t-value="sum_tot + liquidacion.total_a_pagar"/>
+                                    </t>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><t t-esc="'{:,.2f}'.format(sum_mo).replace('.','|').replace(',','.').replace('|',',')"/></td>
+                                        <td></td>
+                                        <td><t t-esc="'{:,.2f}'.format(sum_maq).replace('.','|').replace(',','.').replace('|',',')"/></td>
+                                        <td></td>
+                                        <td><t t-esc="'{:,.2f}'.format(sum_mov).replace('.','|').replace(',','.').replace('|',',')"/></td>
+                                        <td></td>
+                                        <td><t t-esc="'{:,.2f}'.format(sum_prm).replace('.','|').replace(',','.').replace('|',',')"/></td>
+                                        <td><t t-esc="'{:,.2f}'.format(sum_ext).replace('.','|').replace(',','.').replace('|',',')"/></td>
+                                        <td><t t-esc="'{:,.2f}'.format(sum_tot).replace('.','|').replace(',','.').replace('|',',')"/></td>
+                                    </tr>
+                                </tbody>
+                                
+                            </table>
+                            <div class="row">
+                                <div class="col-xs-12" >
+                                    <p>Total a Pagar: <b>$ <t t-esc="'{:,.2f}'.format(sum_tot).replace('.','|').replace(',','.').replace('|',',')"/></b></p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                <!-- </t> -->
+            </t>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,1436 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+  <data noupdate="0">
+    <template id="orden_de_trabajo_individual">
+      <t t-call="website.layout">
+        <t t-set="title">Ofreser - Tablero de órdenes de trabajo</t>
+
+        <div class="main-wrapper">
+          <section class="header">
+            <img src="/devoo_ofreser/static/src/img/log2.png" alt="Ofreser" class="header-image"/>
+            <div class="orden-estados">
+              <div class='estado'>Estado: <span class="estado-pequeño"><t t-esc="dict(orden.fields_get(allfields=['estado'])['estado']['selection'])[orden.estado]"/></span></div>
+              <div class="orden-estado-botones">
+                <t t-if="orden.estado=='en_espera'">
+                  <a t-att-href="'/odtindividual/%s/iniciar' % orden.id">
+                    <div class="boton boton-iniciar">Iniciar</div>
+                  </a>
+                </t>
+                <t t-if="orden.estado=='en_espera'">
+                  <a t-att-href="'/odtindividual/%s/reprogramar' % orden.id">
+                    <div class="boton boton-reprogramar">Reprogramar</div>
+                  </a>
+                </t>
+                <t t-if="orden.estado=='reprogramar'">
+                  <a t-att-href="'/odtindividual/%s/a_espera' % orden.id">
+                    <div class="boton boton-reprogramar">A espera</div>
+                  </a>
+                </t>
+                <!-- <a t-att-href="'/odtindividual/%s/cancelar' % orden.id">
+                  <div class="boton boton-cancelar">Cancelar</div>
+                </a> -->
+              </div>
+            </div>
+          </section>
+          <t t-if="orden.estado == 'en_proceso'">
+            <section class='orden'>
+              <div id="ofreser-errors"></div>
+              <form t-att-action="'/odtindividual/%s/guardar' % orden.id" method="post" enctype="multipart/form-data" id="orden_form">
+                <!-- NUMERO DE CERTIFICADO -->
+                <div class="orden-field">
+                    <div class="name">N° de Certificado:</div>
+                    <div class="value">
+                      <input type="text"
+                            class="input_field" 
+                            name="numero_certificado"
+                            t-att-value="orden.certificado_id.numero"/>
+                    </div>
+                  </div>
+
+                <!-- DATOS ESTATICOS -->
+                <div class="double-field-row">
+                  <div class="orden-field">
+                    <div class="name">Cliente:</div>
+                    <div class="value"><t t-esc="orden.partner_id.name"/></div>
+                  </div>
+                  <div class="orden-field">
+                    <div class="name">CUIL/T:</div>
+                    <div class="value">
+                      <input type="text"
+                          class="input_field" 
+                          name="cuit"
+                          t-att-value="orden.cuit"/>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="orden-field">
+                  <div class="name">Contacto:</div>
+                  <div class="value"><t t-esc="orden.contacto"/></div>
+                </div>
+
+                <div class="orden-field">
+                  <div class="name">Dirección:</div>
+                  <div class="value">
+                    <input type="text"
+                          class="input_field" 
+                          name="domicilio"
+                          t-att-value="orden.domicilio"/>
+                  </div>
+                </div>
+
+                <div class="orden-field">
+                  <div class="name">Telefono:</div>
+                  <div class="value">
+                    <input type="text"
+                          class="input_field" 
+                          name="telefono"
+                          t-att-value="orden.telefono"/>
+                  </div>
+                </div>
+
+                <div class="orden-field">
+                  <div class="name">Celular:</div>
+                  <div class="value">
+                    <input type="text"
+                          class="input_field" 
+                          name="movil"
+                          t-att-value="orden.movil"/>
+                  </div>
+                </div>
+
+                <div class="orden-field">
+                  <div class="name">Email:</div>
+                  <div class="value">
+                    <input type="text"
+                          class="input_field" 
+                          name="email"
+                          t-att-value="orden.email"/>
+                    
+                  </div>
+                </div>
+
+                <!-- PRECIO Y FACTURA -->
+                <div class="double-field-row">
+    
+                  <div class="orden-field">
+                    <div class="name">Precio:</div>
+                    <div class="value">
+                      <input type="number" 
+                          step="0.01"
+                          class="input_field" 
+                          name="precio"
+                          t-att-value="orden.precio"/>
+                    </div>
+                  </div>
+
+                  <div class="orden-field">
+                    <div class="name">Factura:</div>
+                    <div class="value">
+                      <input type="text"
+                          class="input_field" 
+                          name="factura"
+                          t-att-value="orden.factura"/>
+                    </div>
+                  </div>
+
+                </div>
+
+                <!-- PAGADO -->
+                <div class="orden-field pagado">
+                  <div class="name">Pagado:</div>
+                  <div class="value">
+                    <t t-if="orden.pagado == 'si'">
+                      <input type="checkbox" name="pagado" value="True" checked="checked"/>
+                    </t>
+                    <t t-if="orden.pagado == 'no'">
+                      <input type="checkbox" name="pagado" value="True"/>
+                    </t>
+                  </div>
+                </div>
+                
+                <!-- FECHA DE SERVICIO -->
+                <div class="orden-field">
+                  <div class="name">Fecha de Servicio:</div>
+                  <div class="value">
+                    <div class='input-group date' id='datetimepicker'>
+                        <t t-if="orden.fecha_servicio">
+                          <!-- al value que obtengo deberia restarle -3 hs -->
+                          <t t-set="dt_utc" t-value="datetime.datetime.strptime(orden.fecha_servicio,'%Y-%m-%d %H:%M:%S')"/>
+                          <t t-set="dt_utc" t-value="dt_utc - datetime.timedelta(hours=3)"/>
+                          <input type='text' class="form-control input_field" name="fecha_servicio"
+                                t-att-value="dt_utc.strftime('%d/%m/%Y %H:%M')"/>
+                                <!-- t-att-value="datetime.datetime.strptime(orden.fecha_servicio,'%Y-%m-%d %H:%M:%S').strftime('%d/%m/%Y %H:%M')"/> -->
+                      </t>
+                      <t t-if="not orden.fecha_servicio">
+                        <input type='text' class="form-control" name="fecha_servicio"/>
+                      </t>
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- FECHA DE VENCIMIENTO -->
+                <div class="orden-field">
+                  <div class="name">Fecha de Vencimiento:</div>
+                  <div class="value">
+                    <div class='input-group date' id='datetimepicker2'>
+                        <t t-if="orden.fecha_vencimiento">
+                          <t t-set="dt_utc" t-value="datetime.datetime.strptime(orden.fecha_vencimiento,'%Y-%m-%d %H:%M:%S')"/>
+                          <t t-set="dt_utc" t-value="dt_utc - datetime.timedelta(hours=3)"/>
+                          <input type='text' class="form-control input_field" name="fecha_vencimiento"
+                                t-att-value="dt_utc.strftime('%d/%m/%Y %H:%M')"/>
+                        </t>
+                        <t t-if="not orden.fecha_vencimiento">
+                          <input type='text' class="form-control" name="fecha_vencimiento"
+                                />
+                        </t>
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- RUBRO VIEJO -->
+                <!-- <div class="orden-field">
+                  <div class="name">Rubro:</div>
+                  <div class="value">
+                    <select class="input_field" name="rubro">
+                      <option t-value="none"></option>
+                      <t t-foreach="rubros" t-as="rubro">
+                        <t t-if="orden.rubro_id.id == rubro.id">
+                          <option t-att-value="rubro.id" selected="selected"><t t-esc="rubro.name"/></option>
+                        </t>
+                        <t t-if="orden.rubro_id.id != rubro.id">
+                          <option t-att-value="rubro.id"><t t-esc="rubro.name"/></option>
+                        </t>
+                      </t>
+                    </select>
+                  </div>
+                </div> -->
+
+                <!-- RUBRO NUEVO -->
+                <div class="orden-field">
+                  <div class="name">Rubro:</div>
+                  <div class="value" id='rubro-field' t-att-data-rubro-id="orden.rubro_id.id">
+                    <input type='text' class="buscar-rubro input_field" name="rubro_name" t-att-value="orden.rubro_id.name"/>
+                    <input type="text" class="buscar-rubro-id" name="rubro_id" t-att-value="orden.rubro_id.id"/>
+                    <div class="lista_busqueda_rubro"></div>
+                  </div>
+                </div>
+
+                <!-- SUPERFICIES  -->
+                <div class="double-field-row">
+    
+                  <div class="orden-field">
+                    <div class="name">Sup. Total:</div>
+                    <div class="value">
+                      <input type="number"
+                            class="superficie_total input_field" 
+                            name="superficie_total_inmueble"
+                            t-att-value="orden.superficie_total_inmueble"/>
+                    </div>
+                  </div>
+
+                  <div class="orden-field">
+                    <div class="name">Sup. Tratada:</div>
+                    <div class="value">
+                      <input type="number" 
+                            class="superficie_tratada input_field" 
+                            name="superficie_total_tratada"
+                            t-att-value="orden.superficie_total_tratada"/>
+                    </div>
+                  </div>
+
+                </div>
+
+                <!-- TIPOS DE TRABAJO -->
+                <div class="orden-field">
+                  <div class="name">Tipos de Trabajo:</div>
+                  <div class="headers">
+                    <div>Nombre</div>
+                    <div></div>
+                  </div>
+                  <div class="orden-tipo_trabajo_lista_body values">
+                    <t t-foreach="orden.tipos_de_trabajo_ids" t-as="tipo_trabajo">
+                      <div class='orden-tipo_trabajo_item' id="buscar-tipo_trabajo-wrapper" t-att-data-tipo_trabajo-id="tipo_trabajo.id">
+
+                        <select class="input_field" t-att-name="'tipo_trabajo_item--%s' % tipo_trabajo.id">
+                          <option t-value="none"></option>
+                          <t t-foreach="tipos_de_trabajos" t-as="tipo_de_trabajo">
+                            <t t-if="tipo_de_trabajo.id == tipo_trabajo.id">
+                              <option t-att-value="tipo_de_trabajo.id" selected="selected"><t t-esc="tipo_de_trabajo.name"/></option>
+                            </t>
+                            <t t-if="tipo_de_trabajo.id != tipo_trabajo.id">
+                              <option t-att-value="tipo_de_trabajo.id"><t t-esc="tipo_de_trabajo.name"/></option>
+                            </t>
+                          </t>
+                        </select>
+
+                        <div class="tipo_trabajo_borrar borrar-elemento" t-att-onClick="'borrar_elemento(`tipo_trabajo`,%s)' % tipo_trabajo.id">
+                          <i class="far fa-trash-alt"></i>
+                        </div>
+                        <ul class="lista_busqueda_tipo_trabajo"></ul>
+                      </div>
+                    </t>
+                  </div>
+
+                  <!-- boton añadir -->
+                  <div class="anadir_tipo_trabajo_wrapper add-elemento">
+                    <div class="anadir_tipo_trabajo" t-att-onClick="'anadir_elemento_select(`tipo_trabajo`, %s)' % ('get_counter(`tipo_trabajo`)')">
+                      <i class='shape32'></i>
+                    </div>
+                  </div>
+
+                </div>
+
+                <!-- MANO DE OBRA -->
+                <div class="orden-field">
+                  <div class="name">Mano de Obra:</div>
+                  <div class="headers">
+                    <div>Nombre</div>
+                    <div>Porcentaje</div>
+                    <div></div>
+                  </div>
+                  <div class="orden-mano_obra_utilizada_lista_body values">
+                    <t t-foreach="orden.mano_de_obra_utilizada_ids" t-as="mano_obra_utilizada">
+                      <div class="orden-mano_obra_utilizada_item" t-att-data-mano_obra_utilizada-id="mano_obra_utilizada.id">
+
+                        <select class="input_field" t-att-name="'mano_obra_utilizada_item--%s' % mano_obra_utilizada.id">
+                          <option t-value="none"></option>
+                          <t t-foreach="empleados" t-as="empleado">
+                            <t t-if="empleado.id == mano_obra_utilizada.user_id.id">
+                              <option t-att-value="empleado.id" selected="selected"><t t-esc="empleado.name"/></option>
+                            </t>
+                            <t t-if="empleado.id != mano_obra_utilizada.user_id.id">
+                              <option t-att-value="empleado.id"><t t-esc="empleado.name"/></option>
+                            </t>
+                          </t>
+                        </select>
+
+                        <input class="input_field" type="number" step="0.01" t-att-name="'cantidad_mano_obra_utilizada--%s' % mano_obra_utilizada.id" t-att-value="mano_obra_utilizada.porcentaje"/>
+                        <div class="mano_obra_utilizada_borrar borrar-elemento" t-att-onClick="'borrar_elemento(`mano_obra_utilizada`,%s)' % mano_obra_utilizada.id">
+                          <i class="far fa-trash-alt"></i>
+                        </div>
+                        <ul class="lista_busqueda_mano_obra_utilizada"></ul>
+                      </div>
+                    </t>
+                  </div>
+
+                  <!-- boton añadir -->
+                  <div class="anadir_mano_obra_wrapper add-elemento">
+                    <div class="anadir_mano_obra" t-att-onClick="'anadir_elemento_select(`mano_obra_utilizada`, %s, cantidad=true)' % ('get_counter(`mano_obra_utilizada`)')"><i class='shape32'></i></div>
+                  </div>
+                </div>
+
+                <!-- PRODUCTOS -->
+                <div class="orden-field">
+                  <div class="name">Productos:</div>
+                  <div class="headers">
+                    <div>Nombre</div>
+                    <div>Cantidad</div>
+                    <div></div>
+                  </div>
+                  <div class="orden-producto_consumido_lista_body values">
+                    <t t-foreach="orden.productos_consumidos_ids" t-as="prod_consumido">
+                      <div class="orden-producto_consumido_item" t-att-data-producto_consumido-id="prod_consumido.id">
+                        <input type='text' class="buscar-producto_consumido input_field" t-att-value="prod_consumido.product_id.name"/>
+                        <input type="text" class="buscar-producto_consumido-id" t-att-name="'producto_consumido_item--%s' % prod_consumido.id" t-att-value="prod_consumido.product_id.id"/>
+                        <div class="cantidad-uom">
+                          <input type="number" 
+                                step="0.01"
+                                class="input_field" 
+                                t-att-name="'cantidad_producto_consumido--%s' % prod_consumido.id" 
+                                t-att-value="prod_consumido.cantidad"/>
+                          <div class="producto_consumido_uom uom"><t t-esc="prod_consumido.product_id.uom_id.name"/></div>
+                        </div>
+                        <div class="producto_consumido_borrar borrar-elemento" t-att-onClick="'borrar_elemento(`producto_consumido`,%s)' % prod_consumido.id">
+                          <i class="far fa-trash-alt"></i>
+                        </div>
+                        <ul class="lista_busqueda_producto_consumido"></ul>
+                      </div>
+                    </t>
+                  </div>
+
+                  <!-- boton añadir -->
+                  <div class="anadir_producto_wrapper add-elemento">
+                    <div class="anadir_producto" t-att-onClick="'anadir_elemento(`producto_consumido`, %s, cantidad=true)' % ('get_counter(`producto_consumido`)')">
+                      <i class='shape32'></i>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- PROMOTORES -->
+                <div class="orden-field">
+                  <div class="name">Promotores:</div>
+                  <div class="headers">
+                    <div>Nombre</div>
+                    <div>Porcentaje</div>
+                    <div></div>
+                  </div>
+                  <div class="orden-promotor_lista_body values">
+                      <t t-foreach="orden.promotores_ids" t-as="promotor">
+                        <div class="orden-promotor_item" t-att-data-promotor-id="promotor.id">
+
+                          <select class="input_field" t-att-name="'promotor_item--%s' % promotor.id">
+                            <option t-value="none"></option>
+                            <t t-foreach="empleados" t-as="empleado">
+                              <t t-if="empleado.id == promotor.promotor_id.id">
+                                <option t-att-value="empleado.id" selected="selected"><t t-esc="empleado.name"/></option>
+                              </t>
+                              <t t-if="empleado.id != promotor.promotor_id.id">
+                                <option t-att-value="empleado.id"><t t-esc="empleado.name"/></option>
+                              </t>
+                            </t>
+                          </select>
+                          <input class="input_field" type="number" step="0.01" t-att-name="'cantidad_promotor--%s' % promotor.id" t-att-value="promotor.porcentaje"/>
+                          <div class="promotor_borrar borrar-elemento" t-att-onClick="'borrar_elemento(`promotor`, %s)' % promotor.id">
+                            <i class="far fa-trash-alt"></i>
+                          </div>
+                          <ul class="lista_busqueda_promotor"></ul>
+                        </div>
+                      </t>
+                  </div>
+
+                  <!-- boton añadir -->
+                  <div class="anadir_promotor_wrapper add-elemento">
+                    <div class="anadir_promotor" t-att-onClick="'anadir_elemento_select(`promotor`, %s, cantidad=true)' % ('get_counter(`promotor`)')">
+                      <i class='shape32'></i>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- MOVILIDAD -->
+                <div class="orden-field">
+                  <div class="name">Movilidad:</div>
+                  <div class="headers">
+                    <div>Nombre</div>
+                    <div>Porcentaje</div>
+                    <div></div>
+                  </div>
+                  <div class="orden-movilidad_utilizada_lista_body values">
+
+                    <t t-foreach="orden.movilidad_utilizadas_ids" t-as="movilidad_utilizada">
+                      <div class='orden-movilidad_utilizada_item' t-att-data-movilidad_utilizada-id="movilidad_utilizada.id">
+                        
+                        <select class="input_field" 
+                                t-att-name="'movilidad_utilizada_item--%s' % movilidad_utilizada.id"
+                                t-att-onChange="'onchange_select(event, `movilidad_utilizada`, %s)' % movilidad_utilizada.id">
+                          <option t-value="none"></option>
+                          <t t-foreach="moviles" t-as="movil">
+                            <t t-if="movil.id == movilidad_utilizada.movilidad_id.id">
+                              <option t-att-value="movil.id" selected="selected"><t t-esc="movil.name"/></option>
+                            </t>
+                            <t t-if="movil.id != movilidad_utilizada.movilidad_id.id">
+                              <option t-att-value="movil.id"><t t-esc="movil.name"/></option>
+                            </t>
+                          </t>
+                        </select>
+                        
+                        <!-- <input type="text" class="buscar-movilidad_utilizada_responsable input_field" t-att-value="movilidad_utilizada.responsable_id.name"/> -->
+                        <input type="number" step="0.01" class="input_field" t-att-name="'cantidad_movilidad_utilizada--%s' % movilidad_utilizada.id" t-att-value="movilidad_utilizada.porcentaje"/>
+                        <div class="movilidad_utilizada_borrar borrar-elemento" t-att-onClick="'borrar_elemento(`movilidad_utilizada`,%s)' % movilidad_utilizada.id">
+                          <i class="far fa-trash-alt"></i>
+                        </div>
+                      </div>
+                      <div class="movilidad_utilizada_responsable responsable">Responsable: <t t-esc="movilidad_utilizada.responsable_id.name"/></div>
+
+                    </t>
+                  </div>
+
+                  <!-- boton añadir -->
+                  <div class="anadir_maquina_wrapper add-elemento">
+                    <div class="anadir_maquina" t-att-onClick="'anadir_elemento_select(`movilidad_utilizada`, %s, cantidad=true, responsable=true)' % ('get_counter(`movilidad_utilizada`)')">
+                      <i class='shape32'></i>
+                    </div>
+                  </div>
+
+                </div>
+
+                <!-- MAQUINAS -->
+                <div class="orden-field">
+                  <div class="name">Maquinas:</div>
+                  <div class="headers">
+                    <div>Nombre</div>
+                    <div>Porcentaje</div>
+                    <div></div>
+                  </div>
+                  <div class="orden-maquina_utilizada_lista_body values">
+                    <t t-foreach="orden.maquinas_utilizadas_ids" t-as="maquina_utilizada">
+                      <div class='orden-maquina_utilizada_item' id="buscar-maquina-wrapper" t-att-data-maquina_utilizada-id="maquina_utilizada.id">
+                        
+                        <select class="input_field" 
+                                t-att-name="'maquina_utilizada_item--%s' % maquina_utilizada.id"  
+                                t-att-onChange="'onchange_select(event, `maquina_utilizada`, %s)' % maquina_utilizada.id">
+                          <option t-value="none"></option>
+                          <t t-foreach="maquinas" t-as="maquina">
+                            <t t-if="maquina.id == maquina_utilizada.maquina_id.id">
+                              <option t-att-value="maquina.id" selected="selected"><t t-esc="maquina.name"/></option>
+                            </t>
+                            <t t-if="maquina.id != maquina_utilizada.maquina_id.id">
+                              <option t-att-value="maquina.id"><t t-esc="maquina.name"/></option>
+                            </t>
+                          </t>
+                        </select>
+                        
+                        <!-- <input type="text" class="buscar-maquina_utilizada_responsable input_field" t-att-value="maquina_utilizada.responsable_id.name"/> -->
+                        <input type="number" step="0.01" class="input_field" t-att-name="'cantidad_maquina_utilizada--%s' % maquina_utilizada.id" t-att-value="maquina_utilizada.porcentaje"/>
+                        <div class="maquina_utilizada_borrar borrar-elemento" t-att-onClick="'borrar_elemento(`maquina_utilizada`,%s)' % maquina_utilizada.id">
+                          <i class="far fa-trash-alt"></i>
+                        </div>
+
+                        <div class="maquina_utilizada_responsable responsable">Responsable: <t t-esc="maquina_utilizada.responsable_id.name"/></div>
+                      </div>
+                    </t>
+                  </div>
+
+                  <!-- boton añadir -->
+                  <div class="anadir_maquina_wrapper add-elemento">
+                    <div class="anadir_maquina" t-att-onClick="'anadir_elemento_select(`maquina_utilizada`, %s, cantidad=true, responsable=true)' % ('get_counter(`maquina_utilizada`)')">
+                      <i class='shape32'></i>
+                    </div>
+                  </div>
+
+                </div>
+
+                <!-- OBSERVACIONES -->
+                <div class="orden-field observaciones">
+                  <div class="name">Observaciones:</div>
+                  <div class="value">
+                    <textarea name="observaciones" rows="8"><t t-esc="orden.observaciones"/></textarea>
+                  </div>
+                </div>
+                
+                <!-- FIRMA | SIGNATURE PAD SCRIPT -->
+                <div class="orden-field">
+                  <div class="name">FIRMA:</div>
+                  <div class="value">
+                    <div class='orden-firma canvas' id="signature-pad">
+                      <canvas>
+
+                      </canvas>
+                    </div>
+                    <div class="boton boton-limpiar">
+                      Limpiar
+                    </div>
+                  </div>
+                </div>
+
+              </form>
+            </section>
+
+            <section class='footer'>
+              <div class="guardar-descartar">
+                <div class="boton boton-guardar">
+                  Guardar
+                </div>
+                <a t-att-href="'/odttablero'">
+                  <div class="boton boton-descartar">Descartar</div>
+                </a>
+              </div>
+
+            </section>
+          </t>
+          <t t-if="orden.estado != 'en_proceso'">
+            <section class='orden'>
+              <form t-att-action="'/odtindividual/%s/guardar' % orden.id" method="post" enctype="multipart/form-data" id="orden_form">
+                <!-- NUMERO DE CERTIFICADO -->
+                <div class="orden-field">
+                    <div class="name">N° de Certificado:</div>
+                    <div class="value"><t t-esc="orden.certificado_id.numero"/></div>
+                </div>
+
+                <!-- DATOS ESTATICOS -->
+                <div class="double-field-row">
+                  <div class="orden-field">
+                    <div class="name">Cliente:</div>
+                    <div class="value"><t t-esc="orden.partner_id.name"/></div>
+                  </div>
+                  <div class="orden-field">
+                      <div class="name">CUIL/T:</div>
+                      <div class="value"><t t-esc="orden.cuit"/></div>
+                  </div>
+                </div>
+                <div class="orden-field">
+                  <div class="name">Contacto:</div>
+                  <div class="value"><t t-esc="orden.contacto"/></div>
+                </div>
+                <div class="orden-field">
+                  <div class="name">Dirección:</div>
+                  <div class="value"><t t-esc="orden.domicilio"/></div>
+                </div>
+
+                <div class="orden-field">
+                  <div class="name">Telefono:</div>
+                  <div class="value"><t t-esc="orden.domicilio"/></div>
+                </div>
+
+                <div class="orden-field">
+                  <div class="name">Celular:</div>
+                  <div class="value"><t t-esc="orden.movil"/></div>
+                </div>
+
+                <div class="orden-field">
+                  <div class="name">Email:</div>
+                  <div class="value"><t t-esc="orden.email"/></div>
+                </div>
+
+                <!-- PRECIO Y FACTURA -->
+                <div class="double-field-row">
+    
+                  <div class="orden-field">
+                    <div class="name">Precio:</div>
+                    <div class="value">$<t t-esc="orden.precio"/></div>
+                  </div>
+
+                  <div class="orden-field">
+                    <div class="name">Factura:</div>
+                    <div class="value"><t t-esc="orden.factura"/></div>
+                  </div>
+
+                </div>
+
+                <!-- PAGADO -->
+                <div class="orden-field pagado">
+                  <div class="name">Pagado:</div>
+                  <div class="value">
+                    <t t-if="orden.pagado == 'si'">
+                      <input type="checkbox" name="pagado" value="True" checked="checked" disabled='disabled'/>
+                    </t>
+                    <t t-if="orden.pagado == 'no'">
+                      <input type="checkbox" name="pagado" value="True" disabled='disabled'/>
+                    </t>
+                  </div>
+                </div>
+                
+                <!-- FECHA DE SERVICIO -->
+                <div class="orden-field">
+                  <div class="name">Fecha de Servicio:</div>
+                  <t t-if="orden.fecha_servicio">
+                    <!-- al value que obtengo deberia restarle -3 hs -->
+                    <t t-set="dt_utc" t-value="datetime.datetime.strptime(orden.fecha_servicio,'%Y-%m-%d %H:%M:%S')"/>
+                    <t t-set="dt_utc" t-value="dt_utc - datetime.timedelta(hours=3)"/>
+                    <div class="value"><t t-esc="dt_utc.strftime('%d/%m/%Y %H:%M')"/></div>
+                  </t>
+                  <t t-if="not orden.fecha_servicio">
+                    <div class="value"><t t-esc="orden.fecha_servicio"/></div>
+                  </t>
+                </div>
+
+                <!-- FECHA DE VENCIMIENTO -->
+                <div class="orden-field">
+                  <div class="name">Fecha de Vencimiento:</div>
+                   <t t-if="orden.fecha_vencimiento">
+                    <!-- al value que obtengo deberia restarle -3 hs -->
+                    <t t-set="dt_utc" t-value="datetime.datetime.strptime(orden.fecha_vencimiento,'%Y-%m-%d %H:%M:%S')"/>
+                    <t t-set="dt_utc" t-value="dt_utc - datetime.timedelta(hours=3)"/>
+                    <div class="value"><t t-esc="dt_utc.strftime('%d/%m/%Y %H:%M')"/></div>
+                  </t>
+                  <t t-if="not orden.fecha_vencimiento">
+                    <div class="value"><t t-esc="orden.fecha_vencimiento"/></div>
+                  </t>
+                </div>
+
+                <!-- RUBRO -->
+                <!-- <div class="orden-field">
+                  <div class="name">Rubro:</div>
+                  <div class="value"><t t-esc="orden.rubro_id.name"/></div>
+                </div> -->
+
+                <!-- <t t-if="orden.rubro_id"> -->
+                  <div class="orden-field">
+                    <div class="name">Rubro:</div>
+                    <div class="value" id="rubro-field" data-rubro-id="unico">
+                      <input type="text" class="buscar-rubro input_field" name="rubro_name" t-att-value="orden.rubro_id.name"/>
+                      <input type="text" class="buscar-rubro-id" name="rubro_id" t-att-value="orden.rubro_id.id"/>
+                      <div class="lista_busqueda_rubro"></div>
+                    </div>
+                  </div>
+                <!-- </t> -->
+                <!-- <t t-if="orden.rubro_id">
+                  <div class="orden-field">
+                    <div class="name">Rubro:</div>
+                    <div class="value" id="rubro-field" t-att-data-rubro-id="orden.rubro_id.id">
+                      <input type="text" class="buscar-rubro input_field" name="rubro_name" t-att-value="orden.rubro_id.name"/>
+                      <input type="text" class="buscar-rubro-id" name="rubro_id" t-att-value="orden.rubro_id.id"/>
+                      <div class="lista_busqueda_rubro"></div>
+                    </div>
+                  </div>
+                </t> -->
+
+                <!-- SUPERFICIES  -->
+                <div class="double-field-row">
+    
+                  <div class="orden-field">
+                    <div class="name">Sup. Total:</div>
+                    <div class="value"><t t-esc="orden.superficie_total_inmueble"/></div>
+                  </div>
+
+                  <div class="orden-field">
+                    <div class="name">Sup. Tratada:</div>
+                    <div class="value"><t t-esc="orden.superficie_total_tratada"/></div>
+                  </div>
+
+                </div>
+
+                <!-- TIPOS DE TRABAJO -->
+                <div class="orden-field">
+                  <div class="name">Tipos de Trabajo:</div>
+                  <div class="orden-tipo_trabajo_lista_body values">
+                    <t t-foreach="orden.tipos_de_trabajo_ids" t-as="tipo_trabajo">
+                      <div class='orden-tipo_trabajo_item' id="buscar-tipo_trabajo-wrapper" t-att-data-tipo_trabajo-id="tipo_trabajo.id">
+                        <div class="value"><t t-esc="tipo_trabajo.name"/></div>
+                      </div>
+                    </t>
+                  </div>
+                </div>
+
+                <!-- MANO DE OBRA -->
+                <div class="orden-field">
+                  <div class="name">Mano de Obra:</div>
+                  <div class="headers">
+                    <div>Nombre</div>
+                    <div>Porcentaje</div>
+                    <div></div>
+                  </div>
+                  <div class="orden-mano_obra_utilizada_lista_body values">
+                    <t t-foreach="orden.mano_de_obra_utilizada_ids" t-as="mano_obra_utilizada">
+                      <div class="orden-mano_obra_utilizada_item" t-att-data-mano_obra_utilizada-id="mano_obra_utilizada.id">
+                        <div class="value"><t t-esc="mano_obra_utilizada.user_id.name"/></div>
+                        <div class="value"><t t-esc="mano_obra_utilizada.porcentaje"/></div>
+                      </div>
+                    </t>
+                  </div>
+                </div>
+
+                <!-- PRODUCTOS -->
+                <div class="orden-field">
+                  <div class="name">Productos:</div>
+                  <div class="headers">
+                    <div>Nombre</div>
+                    <div>Cantidad</div>
+                    <div></div>
+                  </div>
+                  <div class="orden-producto_consumido_lista_body values">
+                    <t t-foreach="orden.productos_consumidos_ids" t-as="prod_consumido">
+                      <div class="orden-producto_consumido_item" t-att-data-producto_consumido-id="prod_consumido.id">
+                        <div class="value"><t t-esc="prod_consumido.product_id.name"/></div>
+                        <div class="value"><t t-esc="prod_consumido.cantidad"/> <t t-esc="prod_consumido.product_id.uom_id.name"/></div>
+                      </div>
+                    </t>
+                  </div>
+                </div>
+
+                <!-- PROMOTORES -->
+                <div class="orden-field">
+                  <div class="name">Promotores:</div>
+                  <div class="headers">
+                    <div>Nombre</div>
+                    <div>Porcentaje</div>
+                    <div></div>
+                  </div>
+                  <div class="orden-promotor_lista_body values">
+                      <t t-foreach="orden.promotores_ids" t-as="promotor">
+                        <div class="orden-promotor_item" t-att-data-promotor-id="promotor.id">
+                          <div class="value"><t t-esc="promotor.promotor_id.name"/></div>
+                          <div class="value"><t t-esc="promotor.porcentaje"/></div>
+                        </div>
+                      </t>
+                  </div>
+                </div>
+
+                <!-- MOVILIDAD -->
+                <div class="orden-field">
+                  <div class="name">Movilidad:</div>
+                  <div class="headers">
+                    <div>Nombre</div>
+                    <div>Porcentaje</div>
+                    <div></div>
+                  </div>
+                  <div class="orden-movilidad_utilizada_lista_body values">
+                    <t t-foreach="orden.movilidad_utilizadas_ids" t-as="movilidad_utilizada">
+                      <div class='orden-movilidad_utilizada_item' t-att-data-movilidad_utilizada-id="movilidad_utilizada.id">
+                        <div class="value"><t t-esc="movilidad_utilizada.movilidad_id.name"/> | <span class="movilidad_utilizada_responsable responsable">Responsable: <t t-esc="movilidad_utilizada.responsable_id.name"/></span></div>
+                        <div class="value"><t t-esc="movilidad_utilizada.porcentaje"/></div>
+                      </div>
+                    </t>
+                  </div>
+                </div>
+
+                <!-- MAQUINAS -->
+                <div class="orden-field">
+                  <div class="name">Maquinas:</div>
+                  <div class="headers">
+                    <div>Nombre</div>
+                    <div>Porcentaje</div>
+                    <div></div>
+                  </div>
+                  <div class="orden-maquina_utilizada_lista_body values">
+                    <t t-foreach="orden.maquinas_utilizadas_ids" t-as="maquina_utilizada">
+                      <div class='orden-maquina_utilizada_item' id="buscar-maquina-wrapper" t-att-data-maquina_utilizada-id="maquina_utilizada.id">
+                        <div class="value"><t t-esc="maquina_utilizada.maquina_id.name"/> | <span class="maquina_utilizada_responsable responsable">Responsable: <t t-esc="maquina_utilizada.responsable_id.name"/></span></div>
+                        <div class="value"><t t-esc="maquina_utilizada.porcentaje"/></div>
+                      </div>
+                    </t>
+                  </div>
+                </div>
+
+                <!-- OBSERVACIONES -->
+                <div class="orden-field observaciones">
+                  <div class="name">Observaciones:</div>
+                  <div class="value">
+                    <div class="value"><t t-esc="orden.observaciones"/></div>
+                  </div>
+                </div>
+
+              </form>
+            </section>
+          </t>
+    
+        </div>
+
+
+        <script src="https://cdn.jsdelivr.net/npm/signature_pad@2.3.2/dist/signature_pad.min.js"></script>
+        <script type="text/javascript">
+
+            $(function () {
+                //$('#datetimepicker').datetimepicker({locale:'es'});
+
+                $('#datetimepicker').datetimepicker({
+                    language:'es',
+                    format: 'DD/MM/YYYY HH:mm'
+                });
+                $('#datetimepicker2').datetimepicker({
+                    format: 'DD/MM/YYYY HH:mm'
+                });
+            });
+        </script>
+        <script>
+
+          var producto_consumido_nuevo_counter = 0;  //tiene que ser una variable global
+          var maquina_utilizada_nueva_counter = 0;  //tiene que ser una variable global
+          var movilidad_utilizada_nueva_counter = 0;  //tiene que ser una variable global
+          var mano_obra_nuevo_counter = 0;  //tiene que ser una variable global
+          var tipo_trabajo_nuevo_counter = 0;  //tiene que ser una variable global
+          var extra_nuevo_counter = 0;  //tiene que ser una variable global
+          var promotor_nuevo_counter = 0;
+          
+
+          function borrar_elemento(nombreElemento, elementoId){
+            stringSelector = `[data-${nombreElemento}-id=\'${elementoId}\']`
+            console.log(stringSelector)
+            elemento = document.querySelector(stringSelector);
+            elemento.parentNode.removeChild(elemento);
+          }
+
+          function to_camel(s){
+            return s.replace(/([-_][a-z])/ig, ($1) => {
+              return $1.toUpperCase()
+                .replace('-', '')
+                .replace('_', '');
+            });
+          }
+
+          function anadir_elemento(nombreElemento, counter, cantidad=null, responsable=null) {
+              console.log('-----------------------------------')
+              console.log(nombreElemento)
+              console.log(counter)
+              var nuevo_data = "nuevo-" + counter;
+              elemento = document.createElement('DIV');
+              elemento.className = `orden-${nombreElemento}_item`;
+              elemento.setAttribute(`data-${nombreElemento}-id` ,nuevo_data);
+
+              // este es el nombre, tambien lo llevan todos, no es necesario verificar
+              elementoInput = document.createElement('INPUT');
+              elementoInput.type = "text";
+              elementoInput.className = `buscar-${nombreElemento} input_field`;
+              elementoInput.addEventListener('keyup',function(){elementSearch(nuevo_data,nombreElemento)}, false)
+              elementoInput.addEventListener('focus',elementSearch, false)
+              elementoInput.addEventListener('focusout',cancelSearch, false)
+
+              // lo llevan todos, no es necesario verificar
+              elementoInputId = document.createElement('INPUT');
+              elementoInputId.type = "text";
+              elementoInputId.className = `buscar-${nombreElemento}-id`;
+              elementoInputId.name = `${nombreElemento}_item--nuevo-${counter}`;
+
+              // tambien todos llevan borrar
+              elementoBorrar = document.createElement('DIV')
+              elementoBorrar.className = `${nombreElemento}_borrar borrar-elemento`
+              // TODO: la funcion borrar elemento tambien tiene que ser usada por todos
+              // elementoBorrar.setAttribute("onClick",`borrar_${nombreElemento}(\'`+nuevo_data+"\')")
+              elementoBorrar.setAttribute("onClick",`borrar_elemento(\'${nombreElemento}\',\'${nuevo_data}\')`)
+              elementoBorrarIcon = document.createElement('I')
+              elementoBorrarIcon.className = "far fa-trash-alt"
+              elementoBorrar.appendChild(elementoBorrarIcon)
+
+              elementoBusqueda = document.createElement('UL')
+              elementoBusqueda.className = `lista_busqueda_${nombreElemento}`
+
+              elemento.appendChild(elementoInput)
+              elemento.appendChild(elementoInputId)
+
+              if (responsable){
+                  // hacer un fetch para traer el responsable_id
+                  var elementoInputResponsable = document.createElement('INPUT')
+                  elementoInputResponsable.type = "text"
+                  elementoInputResponsable.className = `buscar-${nombreElemento}_responsable`;
+                  //elementoInputResponsable.name= `cantidad_${nombreElemento}--${nuevo_data}`
+                  elemento.appendChild(elementoInputResponsable)
+              }
+
+
+              if (cantidad){
+                  var elementoInputCantidad = document.createElement('INPUT')
+                  
+                  elementoCantidadContainer = document.createElement('DIV')
+                  elementoCantidadContainer.className = "cantidad-uom"
+
+                  elementoInputCantidad.type = "number"
+                  elementoInputCantidad.step = "0.01"
+                  // elementoInputCantidad.className = `${nombreElemento}_cantidad`
+                  elementoInputCantidad.className = 'input_field'
+                  elementoInputCantidad.name= `cantidad_${nombreElemento}--${nuevo_data}`
+
+                  elementoUom = document.createElement('DIV')
+                  elementoUom.className = `${nombreElemento}_uom`
+                  elementoUom.innerHTML = 'uom'
+
+                  elementoCantidadContainer.appendChild(elementoInputCantidad)
+                  elementoCantidadContainer.appendChild(elementoUom)
+
+                  elemento.appendChild(elementoCantidadContainer)
+              }
+
+
+              elemento.appendChild(elementoBorrar)
+              elemento.appendChild(elementoBusqueda)
+
+              lista_elementos = document.querySelector(`.orden-${nombreElemento}_lista_body`);
+              lista_elementos.appendChild(elemento);
+              add_counter(nombreElemento)
+          }
+
+          function get_uom(prdocut_id){
+            Url = `/buscaruom?id=${productid}`
+                fetch(Url).then(data=>{return data.json()})
+                .then(res => {
+                    console.log('---------------')
+                    console.log(res['uom'])
+                    return res['uom']
+                })
+          }
+
+          function add_counter(nombreElemento) {
+              switch (nombreElemento) {
+                  case "tipo_trabajo":
+                      window.tipo_trabajo_nuevo_counter++
+                      break;
+                  case "mano_obra_utilizada":
+                      window.mano_obra_nuevo_counter++
+                      break;
+                  case "producto_consumido":
+                      window.producto_consumido_nuevo_counter++;
+                      break;
+                  case "maquina_utilizada":
+                      window.maquina_utilizada_nueva_counter++;
+                      break;
+                  case "movilidad_utilizada":
+                      window.movilidad_utilizada_nueva_counter++;
+                      break;
+                  case "extra":
+                      window.extra_nuevo_counter++;
+                      break;
+                  case "promotor":
+                      window.promotor_nuevo_counter++;
+                      break;
+                  default:
+                      console.log('Hit default');
+              }
+          }
+
+          function get_counter(nombreElemento){
+              console.log(nombreElemento)
+              switch (nombreElemento) {
+                  case "tipo_trabajo":
+                      return window.tipo_trabajo_nuevo_counter
+                      break;
+                  case "mano_obra_utilizada":
+                      return window.mano_obra_nuevo_counter
+                      break;
+                  case "producto_consumido":
+                      return window.producto_consumido_nuevo_counter;
+                      break;
+                  case "maquina_utilizada":
+                      return window.maquina_utilizada_nueva_counter;
+                      break;
+                  case "movilidad_utilizada":
+                      return window.movilidad_utilizada_nueva_counter;
+                      break;
+                  case "extra":
+                      return window.extra_nuevo_counter;
+                      break;
+                  case "promotor":
+                      return window.promotor_nuevo_counter;
+                      break;
+                  default:
+                      console.log('Hit default');
+              }
+          }
+
+          function elementSearch(item_data, tipo){
+            // data-producto-id o data-maquina-id
+            //console.log("[data-"+tipo+"-id=\'"+item_data+"\']")
+            item = document.querySelector("[data-"+tipo+"-id=\'"+item_data+"\']")
+            input_element = item.querySelector(`.buscar-${tipo}`)
+            input_value = input_element.value
+            //console.log(`item: ${item}`)
+            //console.log(`input_element: ${input_element}`)
+            //console.log(`input_value: ${input_value}`)
+            // type si el input tiene data-tipo = 'maquina' o 'producto' y lo añado a la url como get
+            // generar la clase del searchList dinamicamente si es maquina o producto (necesitaria un data en realidad)
+            searchList = item.querySelector(`.lista_busqueda_${tipo}`)
+            if (input_value.length >= 3){
+              Url = `/buscarelemento?input=${input_value}&amp;tipo=${tipo}`
+              // console.log(input);
+              // fetch de busqueda
+              if(tipo === 'rubro'){
+                item.querySelector(`.buscar-${tipo}-id`).value = '';
+              }
+               fetch(Url, {credentials: 'include'}).then(data=>{return data.json()})
+              .then(res => {
+                // limpiar la lista
+                while (searchList.firstChild) {
+                  searchList.removeChild(searchList.firstChild);
+                }
+                console.log(res)
+                let elementos = res['elementos']
+
+                if (elementos.length > 0){
+                  
+                  if (!searchList.classList.contains('active')){
+                    searchList.classList.add('active')
+                  }
+                  elementos.forEach(function(elemento){
+                    listLi = document.createElement('LI')
+                    searchInfo = document.createElement('DIV')
+                    searchInfo.className = 'search-item-info'
+                    searchInfo.innerHTML = elemento[1] //es el nombre
+                    elemento_id = elemento[0]
+                    elemento_name = elemento[1]
+                    responsable = ''
+                    if (tipo=='maquina_utilizada' || tipo=='movilidad_utilizada') {
+                      responsable = (elemento[2]) ? elemento[2] : ''
+                    }
+                    uom = ''
+                    if (tipo=='producto_consumido') {
+                      uom = (elemento[2]) ? elemento[2] : ''
+                    }
+                    console.log(`responsable antes de bla bla ---------: ${responsable}`)
+                    searchInfo.setAttribute("onClick","seleccionar_elemento(\'"+elemento_id+"\',\'"+elemento_name+"\',\'"+item_data+"\',\'"+tipo+"\',\'"+responsable+"\',\'"+uom+"\')")
+                    listLi.appendChild(searchInfo)
+                    searchList.appendChild(listLi)
+                    //agregega el event listener de click para clicks afuera de la lista al main-wrapper
+                    main = document.querySelector('.main-wrapper')
+                    main.addEventListener('click', function cancel_search_click(event) {
+                      var targetElement = event.target;
+                      if (targetElement !== searchList){
+                        cancelSearch(item_data,tipo)
+                        main.removeEventListener('click', cancel_search_click)
+                      }
+                    })
+                  })
+                }
+              })
+            } else {
+              cancelSearch(item_data, tipo)
+            }
+          }
+
+
+          function seleccionar_elemento(id, name, item_data, tipo, responsable=false, uom=false){
+            console.log("--------funcion seleccionar_elemento--------")
+            item = document.querySelector("[data-"+tipo+"-id=\'"+item_data+"\']")
+            item.querySelector(`.buscar-${tipo}`).value = name;
+            item.querySelector(`.buscar-${tipo}-id`).value = id;
+            console.log(`responsable en seleccion: ${responsable}`)
+            if (responsable) {
+              console.log(`clase buscada: .buscar-${tipo}_responsable`)
+              item.querySelector(`.buscar-${tipo}_responsable`).value = responsable;
+            }
+            if (tipo==='producto_consumido') {
+              console.log('........es producto consumido, cambiar uom')
+              item.querySelector(`.${tipo}_uom`).innerHTML = uom
+            }
+            cancelSearch(item_data,tipo)
+          }
+
+          function cancelSearch(item_data, tipo){
+            console.log('cancel search')
+            item = document.querySelector("[data-"+tipo+"-id=\'"+item_data+"\']")
+            setTimeout(function(){
+                searchList = item.querySelector(`.lista_busqueda_${tipo}`)
+                // borrar items
+                while (searchList.firstChild) {
+                  searchList.removeChild(searchList.firstChild);
+                }
+                // desactivar clase active
+                if (searchList.classList.contains('active')){
+                  searchList.classList.remove('active')
+                }
+              },100)
+          }
+
+          function cargarEventListeners(){
+            mano_obra_utilizadas = document.querySelectorAll('.orden-mano_obra_utilizada_item');
+            tipos_trabajo = document.querySelectorAll('.orden-tipo_trabajo_item');
+            productos = document.querySelectorAll('.orden-producto_consumido_item');
+            maquinas = document.querySelectorAll('.orden-maquina_utilizada_item');
+            movilidades = document.querySelectorAll('.orden-movilidad_utilizada_item');
+            extras = document.querySelectorAll('.orden-extra_item');
+            rubro = document.querySelector('#rubro-field')
+
+            //mano_obra_utilizadas.forEach(function(mo){
+            //  data = mo.dataset.mano_obra_utilizadaId
+            //  input = mo.querySelector('.buscar-mano_obra_utilizada')
+            //  input.addEventListener('keyup',function(){elementSearch(mo.dataset.mano_obra_utilizadaId,'mano_obra_utilizada')}, false)
+            //});
+
+            //tipos_trabajo.forEach(function(tt){
+            //  data = tt.dataset.tipo_trabajoId
+            //  input = tt.querySelector('.buscar-tipo_trabajo')
+            //  input.addEventListener('keyup',function(){elementSearch(tt.dataset.tipo_trabajoId,'tipo_trabajo')}, false)
+            //});
+
+            //agrego el dataset aca porque el xml no me quiere dejar hacerlo :v
+            rubro.dataset.rubroId = 'unico'
+            rubro.addEventListener('keyup',function(){elementSearch('unico','rubro')}, false)
+
+            productos.forEach(function(prod){
+              data = prod.dataset.producto_consumidoId
+              //console.log(`prod: ${prod},data: ${data}`)
+              input = prod.querySelector('.buscar-producto_consumido')
+              input.addEventListener('keyup',function(){elementSearch(prod.dataset.producto_consumidoId,'producto_consumido')}, false)
+            });
+
+            //maquinas.forEach(function(maq){
+            //  data = maq.dataset.maquina_utilizadaId
+            //  input = maq.querySelector('.buscar-maquina_utilizada')
+            //  input.addEventListener('keyup',function(){elementSearch(maq.dataset.maquina_utilizadaId,'maquina_utilizada')}, false)
+            //});
+
+            //movilidades.forEach(function(mov){
+            //  data = mov.dataset.movilidad_utilizadaId
+            //  input = mov.querySelector('.buscar-movilidad_utilizada')
+            //  input.addEventListener('keyup',function(){elementSearch(mov.dataset.movilidad_utilizadaId,'movilidad_utilizada')}, false)
+            //});
+            //extras.forEach(function(ext){
+            //  data = ext.dataset.extraId
+            //  input = ext.querySelector('.buscar-extra')
+            //  input.addEventListener('keyup',function(){elementSearch(ext.dataset.extraId,'extra')}, false)
+            //});
+          }
+          
+          function anadir_elemento_select(nombreElemento, counter, cantidad=null, responsable=null) {
+              console.log('-----------------------------------')
+              console.log(nombreElemento)
+              console.log(counter)
+              var nuevo_data = "nuevo-" + counter;
+              elemento = document.createElement('DIV');
+              elemento.className = `orden-${nombreElemento}_item`;
+              // elemento.dataset.tipoTrabajoId = nuevo_data;
+              elemento.setAttribute(`data-${nombreElemento}-id` ,nuevo_data);
+
+              // crear elemento select y primera opcion vacia
+              elementoSelect = document.createElement('SELECT');
+              elementoSelect.name = `${nombreElemento}_item--nuevo-${counter}`;
+              elementoSelect.className = 'input_field';
+              //elementoSelect.addEventListener('change',function(){onchange_select(event, nombreElemento, nuevo_data)}, false)
+              optionVacia = document.createElement('OPTION')
+              elementoSelect.appendChild(optionVacia)
+
+              // fetch de la lista de opciones (llamo a element search?),
+              // deberia pero hace otras cosas que no deberia y no quiero ponerme a separarla ahora
+              input_value = '';
+              Url = `/buscarelemento?input=${input_value}&amp;tipo=${nombreElemento}`
+              fetch(Url).then(data=>{return data.json()})
+              .then(res => {
+                  console.log(res)
+                  let elementos = res['elementos']
+                  //selectList = document.querySelector("[name='promotor_item--1']")
+                  elementos.forEach(function(elemento){
+                      console.log(elemento)
+                      optionElement = document.createElement('OPTION');
+                      optionElement.value = elemento[0];  // el id del elemento
+                      optionElement.innerHTML = elemento[1];  // el nombre del elemento
+                      elementoSelect.appendChild(optionElement);
+                  })
+              })
+
+              elemento.appendChild(elementoSelect)
+
+              if (responsable){
+                  // añade el evento onchange y cambia el responsable
+                  elementoSelect.addEventListener('change',function(){onchange_select(event, nombreElemento, nuevo_data)}, false)
+                  // hacer un fetch para traer el responsable_id
+                  var elementoResponsable = document.createElement('DIV')
+                  elementoResponsable.className = `${nombreElemento}_responsable responsable`;
+                  elementoResponsable.innerHTML = 'Responsable:'
+
+                  // elemento.appendChild(elementoResponsable)
+              }
+
+              //cantidad
+              if (cantidad){
+                  var elementoInputCantidad = document.createElement('INPUT')
+                  elementoInputCantidad.type = "number"
+                  elementoInputCantidad.step = "0.01"
+                  elementoInputCantidad.className = 'input_field';
+                  elementoInputCantidad.name= `cantidad_${nombreElemento}--${nuevo_data}`
+
+                  elemento.appendChild(elementoInputCantidad)
+              }
+
+              // tambien todos llevan borrar
+              elementoBorrar = document.createElement('DIV')
+              elementoBorrar.className = `${nombreElemento}_borrar borrar-elemento`
+              // TODO: la funcion borrar elemento tambien tiene que ser usada por todos
+              // elementoBorrar.setAttribute("onClick",`borrar_${nombreElemento}(\'`+nuevo_data+"\')")
+              elementoBorrar.setAttribute("onClick",`borrar_elemento('${nombreElemento}',\'${nuevo_data}\')`)
+              elementoBorrarIcon = document.createElement('I')
+              elementoBorrarIcon.className = "far fa-trash-alt"
+              elementoBorrar.appendChild(elementoBorrarIcon)
+
+              elemento.appendChild(elementoBorrar)
+
+              lista_elementos = document.querySelector(`.orden-${nombreElemento}_lista_body`);
+              lista_elementos.appendChild(elemento);
+              if (responsable){
+                // insertAfter(elementoResponsable, elemento)
+                elemento.appendChild(elementoResponsable)
+              }
+              add_counter(nombreElemento)
+          }
+
+          function onchange_select(event, nombreElemento, data_id){
+              console.log('onchange select')
+              item = document.querySelector(`[data-${nombreElemento}-id = '${data_id}']`)
+              console.log('item', item)
+              id = event.target.value
+              console.log('id', id)
+              Url = `/buscarresponsable?id=${id}&amp;tipo=${nombreElemento}`
+              fetch(Url).then(data=>{return data.json()})
+              .then(res => {
+                  responsable_field = item.querySelector(`.${nombreElemento}_responsable`)
+                  responsable_field.innerHTML = `Responsable: ${res['elementos'][0]}`
+              })
+          }
+
+          function insertAfter(newNode, referenceNode) {
+            referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+          }
+
+        </script>
+
+        <!-- SIGNATURE PAD SCRIPT -->
+        <script>
+
+          function dataURLToBlob(dataURL) {
+            // Code taken from https://github.com/ebidel/filer.js
+            var parts = dataURL.split(';base64,');
+            var contentType = parts[0].split(":")[1];
+            var raw = window.atob(parts[1]);
+            var rawLength = raw.length;
+            var uInt8Array = new Uint8Array(rawLength);
+
+            for (var i = 0; i &lt; rawLength; ++i) {
+              uInt8Array[i] = raw.charCodeAt(i);
+            }
+            return new Blob([uInt8Array], { type: contentType });
+          }
+
+          function post_form(form_data, url){
+            <!-- domain = 'clientes.ofreser.com.ar'
+            protocol = 'https://' -->
+            domain = 'localhost:8069'
+            protocol = 'http://'
+            const otherParams = {
+                headers:{},
+                body:form_data,
+                method:"POST"
+            }
+            fullUrl = `${protocol}${domain}${url}`
+            // console.log(url)
+            // console.log(fullUrl)
+            fetch(fullUrl, otherParams)
+            .then(data=>{
+              //console.log(data)
+              window.location.href = '/odttablero';
+            })
+          }
+
+          function validar_mano_de_obra(){
+              porcentaje = 0
+              items = document.querySelector(".orden-mano_obra_utilizada_lista_body")
+              porcentaje_maximo = <t t-esc="orden.maximo_porcentaje_mano_de_obra"/>
+              for (item of items.children){
+                  porcentaje += parseInt(item.querySelector("[type='number']").value)
+              }
+              if (porcentaje > porcentaje_maximo){
+                alert(`La suma de los porcentajes de Mano de Obra es mayor al maximo (${porcentaje_maximo}%)`)
+                return false
+              } else {
+                return true
+              }
+          }
+          function validar_promotores(){
+              porcentaje = 0
+              items = document.querySelector(".orden-promotor_lista_body")
+              porcentaje_maximo = <t t-esc="orden.maximo_porcentaje_promotores"/>
+              for (item of items.children){
+                  porcentaje += parseInt(item.querySelector("[type='number']").value)
+              }
+              if (porcentaje > porcentaje_maximo){
+                alert(`La suma de los porcentajes de Promotores es mayor al maximo (${porcentaje_maximo}%)`)
+                return false
+              } else {
+                return true
+              }
+          }
+
+          function firmar(){
+            
+
+            var wrapper = document.getElementById("signature-pad");
+            var canvas = wrapper.querySelector("canvas");
+            var botonGuardar = document.querySelector(".boton-guardar");
+            var botonLimpiar = document.querySelector(".boton-limpiar");
+            var form = document.getElementById('orden_form');
+            var errorList = document.getElementById('ofreser-errors')
+            var signaturePad = new SignaturePad(canvas, {
+              backgroundColor: 'rgb(255, 255, 255)'
+            });
+            botonLimpiar.addEventListener("click", function (event) {
+              signaturePad.clear();
+            });
+            botonGuardar.addEventListener("click", function (event) {
+              if (validar_mano_de_obra() &amp;&amp; validar_promotores() ){
+                url = "<t t-esc="'/odtindividual/%s/guardar' % orden.id"/>"
+                form_data = new FormData(form);
+                let errors = []
+                let fechasRegEx = new RegExp("^([1-9]|([012][0-9])|(3[01]))\/([0]{0,1}[1-9]|1[012])\/\\d\\d\\d\\d (20|21|22|23|[0-1]?\\d):[0-5]\\d$")
+                let numberRegEx = new RegExp('^[+-]?\\d+(\\.\\d+)?$')
+                let certifRegEx = new RegExp('^[-+]?\\d+$')
+
+                // ------------------------ Validacion de Número de Certificado ------------------------
+                let valNumCertif = form_data.get('numero_certificado')
+                //console.log('Numero certificado: ', valNumCertif, typeof(valNumCertif))
+                if (valNumCertif !== '' &amp;&amp; !certifRegEx.test(valNumCertif)){
+                  errors.push('El número de certificado debe ser un solo número o estar vacio')
+                }
+
+                // ------------------------ Validacion de Precio ------------------------
+                let valPrecio = form_data.get('precio')
+                //console.log('Precio: ',valPrecio, typeof(valPrecio))
+                if (valPrecio !== '' &amp;&amp; !numberRegEx.test(valPrecio)){
+                  errors.push('El Precio debe ser un número entero ó con decimales separados por coma. Ej 400,35 ó 400')
+                }
+                
+                // ------------------------ Validacion de Fecha de Servicio ------------------------
+                let valFeServicio = form_data.get('fecha_servicio')
+                //console.log('FechaServicio: ',valFeServicio, fechasRegEx.test(valFeServicio))
+                if (valFeServicio !== '' &amp;&amp; !fechasRegEx.test(valFeServicio)){
+                  errors.push('La Fecha de Servicio debe tener un formato dd/mm/aaaa HH:MM o estar vacio')
+                }
+
+                // ------------------------ Validacion de Fecha de vencimiento ------------------------
+                let valFeVencimiento = form_data.get('fecha_vencimiento')
+                //console.log('FechaVencimiento: ',valFeVencimiento, fechasRegEx.test(valFeVencimiento))
+                if (valFeVencimiento !== '' &amp;&amp; !fechasRegEx.test(valFeVencimiento)){
+                  errors.push('La Fecha de Vencimiento debe tener un formato dd/mm/aaaa HH:MM o estar vacio')
+                }
+
+                // ------------------------ Validacion de la Superficie Total ------------------------
+                let valSupTotal = form_data.get('superficie_total_inmueble')
+                //console.log('Superficie Total: ',valSupTotal, typeof(valSupTotal))
+                if (valSupTotal !== '' &amp;&amp; !numberRegEx.test(valSupTotal)){
+                  errors.push('La Superficie Total debe ser un número o estar vacio')
+                }
+
+                // ------------------------ Validacion de la Superficie Tratada ------------------------
+                let valSupTratada = form_data.get('superficie_total_tratada')
+                //console.log('Superficie Tratada: ',valSupTratada, typeof(valSupTratada))
+                if (valSupTratada !== '' &amp;&amp; !numberRegEx.test(valSupTratada)){
+                  errors.push('La Superficie Tratada debe ser un número o estar vacio')
+                }
+                if (errors.length > 0){
+                  errorList.innerHTML= ''
+                  errors.forEach(error => {
+                    errorItem = document.createElement('DIV')
+                    errorItem.className = 'ofreser-error-item'
+                    errorItem.innerText = error
+                    errorList.appendChild(errorItem)
+                  })
+                  window.scrollTo({ top: 150, behavior: 'smooth' });
+
+                }
+                else {
+                  // poner loader
+                  ventana = document.getElementById('wrapwrap')
+                  loader_wrap = document.createElement('DIV')
+                  loader_wrap.className = 'ofreser-loader-wrap'
+                  loader = document.createElement('DIV')
+                  loader.className = 'ofreser-loader'
+                  loader.innerText = 'Cargando...'
+                  loader_wrap.appendChild(loader)
+                  ventana.appendChild(loader_wrap)
+                  if (signaturePad.isEmpty()) {
+                    post_form(form_data, url)
+                  } else {
+                    base64_file = signaturePad.toDataURL("image/jpeg");
+                    blob = dataURLToBlob(base64_file)
+                    filename = "firma-<t t-esc="orden.numero_comprobante"/>.jpg"
+
+                    var file = new File([blob], filename, { type: "image/jpeg", lastModified: Date.now() });
+                    form_data.set('firma_archivo',file);
+                    form_data.set('firma_archivo_nombre',filename);
+
+                    post_form(form_data, url);
+                  }
+                }
+
+              }               
+            });
+
+            function resizeCanvas() {
+
+              var ratio =  Math.max(window.devicePixelRatio || 1, 1);
+
+              canvas.width = canvas.offsetWidth * ratio;
+              canvas.height = canvas.offsetHeight * ratio;
+              canvas.getContext("2d").scale(ratio, ratio);
+
+              signaturePad.clear();
+            }
+            resizeCanvas();
+            
+          }
+
+          // function para lodear la funcion firmar una y otra vez hasta que la carge
+          (function () {
+              do {
+                firmar();
+                cargarEventListeners();
+                setTimeout(function(){
+                },1000);
+              }
+              while (wrapper === null);
+          })();
+        </script>
+      </t>
+    </template>
+  </data>
+</openerp>

@@ -1,0 +1,546 @@
+body {
+  font-size: 15px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+select {
+  border: none;
+  background: initial;
+  background: #F0F0F0;
+}
+
+input {
+  background: none;
+  border: none;
+  background: #F0F0F0;
+}
+
+.main-wrapper {
+  width: 95%;
+  margin: 0 auto;
+}
+
+.header {
+  border-bottom: 1px solid black;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+.header-image {
+  width: 150px;
+  margin: 10px 0;
+}
+
+.orden {
+  padding-right: 10px;
+}
+
+/* .orden div {
+  margin: 5px 0;
+} */
+
+#orden_form {
+  font-size: 1.4em;
+}
+
+.input_field {
+  height: 40px;
+  margin: 5px 0;
+  width: 100%;
+}
+
+.orden-estados {
+  width: 100%;
+  margin-bottom: 5px;
+  padding-top: 10px;
+  margin-top: 20px;
+  border-top: 1px solid;
+}
+
+.orden-estado-botones {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 0;
+}
+
+.estado {
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.estado-pequeno {
+  font-size: 20px;
+  font-weight: initial;
+}
+
+.label-bold {
+  font-weight: bold;
+}
+
+label {
+  width: 44%;
+}
+
+select {
+  width: 54%;
+  height: 30px;
+}
+
+.orden .orden-superficies,
+.orden .orden-factura,
+.orden .orden-telefono,
+.orden .orden-certificado {
+  margin-bottom: 15px;
+}
+
+.orden-superficies input {
+  width: 54%;
+}
+
+.orden-fecha_vencimiento_label,
+.orden-fecha_servicio_label {
+  width: 44%;
+  float: left;
+}
+
+.orden-pagado-wrapper {
+  width: 54%;
+  position: relative;
+  height: 30px;
+}
+
+.orden-pagado {
+  display: flex;
+  align-items: center;
+}
+
+.orden-pagado input {
+  opacity: 0;
+  position: absolute;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.pagado-checkbox {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 24px;
+  width: 24px;
+  background-color: transparent;
+  border-radius: 5px;
+  border: 2px solid #666666;
+}
+
+.pagado-checkbox::after {
+  position: absolute;
+  content: "";
+  left: 12px;
+  top: 12px;
+  height: 0px;
+  width: 0px;
+  border-radius: 5px;
+  border: solid #FFF;
+  border-width: 0 3px 3px 0;
+}
+
+.orden-pagado-wrapper input:checked~.pagado-checkbox {
+  background-color: #FFF;
+  border-radius: 5px;
+  transform: rotate(0deg) scale(1);
+  opacity: 1;
+  border: 2px solid #666666;
+}
+
+.orden-pagado-wrapper input:checked~.pagado-checkbox::after {
+  transform: rotate(45deg) scale(1);
+  opacity: 1;
+  left: 8px;
+  top: 3px;
+  width: 6px;
+  height: 12px;
+  border: solid #666666;
+  border-width: 0 2px 2px 0;
+  background-color: transparent;
+  border-radius: 0;
+}
+#rubro-field {
+  position: relative;
+}
+.orden-movilidad_utilizada_item select,
+.orden-extra_item select,
+.orden-maquina_utilizada_item select,
+.orden-tipo_trabajo_item select,
+.orden-mano_obra_utilizada_item select,
+.orden-promotor_item select {
+  width: initial;
+}
+
+.orden-tipo_trabajo,
+.orden-mano_de_obra,
+.orden-maquinas,
+.orden-productos {
+  border-top: 1px solid;
+  border-bottom: 1px solid;
+}
+
+.orden-promotor-titulo,
+.orden-tipos_trabajo-titulo,
+.orden-mano_de_obra-titulo,
+.orden-maquinas-titulo,
+.orden-productos-titulo,
+.orden-movilidad-titulo,
+.orden-extra-titulo {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.anadir_extra_wrapper,
+.anadir_promotor_wrapper,
+.anadir_tipo_trabajo_wrapper,
+.anadir_mano_obra_wrapper,
+.anadir_maquina_wrapper,
+.anadir_producto_wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.anadir_mano_obra,
+.anadir_maquina,
+.anadir_tipo_trabajo,
+.anadir_producto {
+  font-weight: bold;
+  text-align: center;
+  padding: 3px;
+  width: 30%;
+}
+
+.mano_obra_utilizada_borrar:hover,
+.producto_lista_item_borrar:hover,
+.maquina_lista_item_borrar:hover,
+.tipo_trabajo_lista_item_borrar:hover,
+.anadir_mano_obra:hover,
+.anadir_maquina:hover,
+.anadir_tipo_trabajo:hover,
+.anadir_producto:hover {
+  cursor: pointer;
+}
+
+.orden-productos_lista_item {
+  display: grid;
+  grid-template-columns: 60% 30% auto;
+  grid-column-gap: 10px;
+}
+
+.orden-mano_obra_utilizada_item,
+.orden-promotor_lista_header,
+.orden-mano_de_obra_lista_header,
+.orden-extra_lista_header,
+.orden-promotor_item,
+.orden-extra_item {
+  display: grid;
+  grid-template-columns: 60% 30% auto;
+  grid-gap: 10px;
+  position: relative;
+}
+
+.orden-productos_lista_header,
+.orden-producto_consumido_item {
+  display: grid;
+  grid-template-columns: 60% 30% auto;
+  grid-gap: 10px;
+  position: relative;
+}
+
+.orden-maquina_utilizada_lista_header,
+.orden-maquina_utilizada_item,
+.orden-movilidad_utilizada_lista_header,
+.orden-movilidad_utilizada_item {
+  display: grid;
+  grid-template-columns: 60% 30% auto;
+  grid-column-gap: 10px;
+  position: relative;
+}
+
+.orden-productos_lista_item_cantidad input {
+  width: 100%;
+}
+.ofreser-error-item {
+  align-items: center;
+  background-color: #d2322d;
+  border-radius: 4px;
+  color: white;
+  display: flex;
+  font-size: 14px;
+  font-weight: bold;
+  margin: 0 auto;
+  margin-bottom: 5px;
+  padding: 6px 12px;
+  width: 90%;
+}
+.ofreser-loader-wrap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background:  rgba(0,0,0,0.5);
+  z-index: 100;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+}
+.ofreser-loader {
+  position: fixed;
+  top: 50%;
+  font-size: 30px;
+  color: white;
+}
+
+.lista_busqueda_rubro,
+.lista_busqueda_promotor,
+.lista_busqueda_mano_obra_utilizada,
+.lista_busqueda_maquina_utilizada,
+.lista_busqueda_tipo_trabajo,
+.lista_busqueda_producto_consumido,
+.lista_busqueda_movilidad_utilizada,
+.lista_busqueda_extra {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  background: white;
+  width: 100%;
+  top: 45px;
+  box-shadow: 2px 2px 4px;
+  z-index: 10;
+}
+
+.lista_busqueda_tipo_trabajo,
+.lista_busqueda_maquina {
+  width: 90%;
+}
+
+.lista_busqueda_mano_obra_utilizada li,
+.lista_busqueda_maquina li,
+.lista_busqueda_tipo_trabajo li,
+.lista_busqueda_producto-consumido li {
+  border-bottom: 1px solid #D3D3D3;
+}
+
+.orden-tipo_trabajo_item,
+.orden-maquinas_lista_item {
+  display: grid;
+  grid-template-columns: 90% auto;
+  grid-column-gap: 20px;
+  position: relative;
+}
+
+#rubro-field .lista_busqueda_rubro {
+  width: 100%;
+}
+
+.search-item-info {
+  min-height: 45px;
+  padding: 10px 0px 10px 10px;
+  border-bottom: 1px solid #9f9f9f;
+}
+
+.search-item-info:hover {
+  cursor: pointer;
+}
+
+.buscar-rubro-id,
+.buscar-promotor-id,
+.buscar-mano_obra_utilizada-id,
+.buscar-tipo_trabajo-id,
+.buscar-producto_consumido-id,
+.buscar-maquina_utilizada-id,
+.buscar-movilidad_utilizada-id,
+.buscar-extra-id {
+  display: none;
+}
+
+.orden-observaciones textarea {
+  width: 100%;
+}
+
+.orden-firma {
+  background: #F0F0F0;
+  width: 100%;
+  height: 250px;
+  margin-top: 20px;
+}
+
+.orden-firma canvas {
+  width: 100%;
+  height: 100%;
+  border: 2px solid;
+}
+
+.boton {
+  padding: 10px;
+  width: 100px;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+  font-size: 1.1em;
+  text-align: center;
+  height: 40px;
+}
+
+.boton.boton-limpiar {
+  color: black;
+}
+
+.boton-guardar {
+  background: #15289d;
+  /* background: #007E33; */
+  cursor: pointer;
+}
+
+.boton-descartar {
+  background: #15289d;
+  /* background: #CC0000; */
+}
+
+.boton-iniciar {
+  background: #15289d;
+  /* background: #007BFF; */
+}
+
+.boton-finalizar {
+  background: #15289d;
+  /* background: #343A40; */
+}
+
+.boton-reprogramar,
+.boton-cancelar {
+  background: #15289d;
+  /* background: #343A40; */
+}
+
+.boton-volver {
+  background: #17A2B8;
+  cursor: pointer;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 10px;
+  border-top: 1px solid;
+  flex-wrap: wrap;
+}
+
+.guardar-descartar {
+  display: flex;
+  justify-content: space-between;
+}
+
+.guardar-descartar div {
+  margin-right: 10px;
+}
+
+.shape32 {
+  box-sizing: content-box;
+  display: inline-block !important;
+  position: relative;
+  width: 35px;
+  height: 35px;
+  border-radius: 100%;
+  background: rgba(0, 0, 0, 0);
+  border: calc(35px/8) solid #666666
+}
+
+.shape32:before {
+  position: absolute;
+  content: '';
+  margin: auto;
+  width: calc(35px/8);
+  height: calc(35px/1.5);
+  background-color: #666666;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0
+}
+
+.shape32:after {
+  position: absolute;
+  content: '';
+  margin: auto;
+  width: calc(35px/1.5);
+  height: calc(35px/8);
+  background-color: #666666;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0
+}
+
+
+/* NUEVOS QUE SOLO ESTOS RINDEN YA :V */
+
+
+.orden-field {
+  width: 90%;
+  border-bottom: 1px solid black;
+  margin: 0 auto;
+  margin-bottom: 20px;
+}
+
+.name {
+  font-weight: bold;
+  padding-bottom: 5px;
+}
+
+.value {
+  font-weight: lighter;
+  padding-bottom: 5px;
+}
+
+.double-field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 20px;
+  width: 90%;
+  margin: 0 auto;
+}
+
+.double-field-row .orden-field {
+  width: 100%;
+}
+
+.orden-field.pagado {
+  display: flex;
+  justify-content: space-between;
+}
+
+.orden-field .headers {
+  display: grid;
+  grid-template-columns: 60% 30% auto;
+  grid-gap: 10px;
+  position: relative;
+}
+
+.uom,
+.responsable {
+  font-size: 15px;
+}
+
+.observaciones textarea {
+  width: 100%;
+}
+
+.add-elemento {
+  padding: 20px 0 10px;
+}
+
+.borrar-elemento {
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

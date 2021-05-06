@@ -1,0 +1,52 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+,,,,,,,
+1,menu_usuarios,model_res_users,devoo_ofreser.grupo_administracion,1,1,1,1
+2,permisos_users_administracion,model_res_users,devoo_ofreser.grupo_administracion,1,1,1,0
+3,permisos_users_normales,model_res_users,devoo_ofreser.grupo_normales,1,1,1,0
+,,,,,,,
+4,Ordenes de trabajo,model_ofreser_orden_de_trabajo,devoo_ofreser.grupo_secretario,1,1,1,0
+5,Certificados,model_ofreser_certificado,devoo_ofreser.grupo_secretario,1,1,1,1
+6,Product Template,product.model_product_template,devoo_ofreser.grupo_secretario,1,1,1,1
+7,Maquinas,model_ofreser_maquina,devoo_ofreser.grupo_secretario,1,1,1,1
+8,Res Partner,model_res_partner,devoo_ofreser.grupo_secretario,1,1,1,1
+9,Hr employee,model_hr_employee,devoo_ofreser.grupo_secretario,1,1,1,0
+,,,,,,,
+11,Tipo de Trabajo,model_ofreser_tipo_de_trabajo,devoo_ofreser.grupo_secretario,1,1,0,0
+12,Porcentajes Máximos,model_ofreser_porcentaje_maximo,devoo_ofreser.grupo_secretario,1,0,0,0
+13,Mano de Obra Utilizada,model_ofreser_mano_de_obra_utilizada,devoo_ofreser.grupo_secretario,1,1,1,1
+14,Productos Utilizados,model_ofreser_producto_consumido,devoo_ofreser.grupo_secretario,1,1,1,1
+15,Promotores de Orden,model_ofreser_promotor,devoo_ofreser.grupo_secretario,1,1,1,1
+16,Movilidad Utilizada,model_ofreser_movilidad_utilizada,devoo_ofreser.grupo_secretario,1,1,1,1
+17,Maquinas Utilizadas,model_ofreser_maquina_utilizada,devoo_ofreser.grupo_secretario,1,1,1,1
+18,Rubros,model_ofreser_rubro,devoo_ofreser.grupo_secretario,1,1,1,0
+47,Liquidacion MO,model_ofreser_mano_de_obra_liquidacion,devoo_ofreser.grupo_secretario,1,1,0,0
+,,,,,,,
+19,Ordenes de trabajo,model_ofreser_orden_de_trabajo,devoo_ofreser.grupo_administracion_ordenes,1,1,1,1
+20,Certificados,model_ofreser_certificado,devoo_ofreser.grupo_administracion_ordenes,1,1,1,1
+21,Product Template,product.model_product_template,devoo_ofreser.grupo_administracion_ordenes,1,1,1,1
+22,Maquinas,model_ofreser_maquina,devoo_ofreser.grupo_administracion_ordenes,1,1,1,1
+23,Res Partner,model_res_partner,devoo_ofreser.grupo_administracion_ordenes,1,1,1,1
+24,Hr employee,model_hr_employee,devoo_ofreser.grupo_administracion_ordenes,1,1,1,1
+25,Tipo de Trabajo,model_ofreser_tipo_de_trabajo,devoo_ofreser.grupo_administracion_ordenes,1,1,1,1
+26,Porcentajes Máximos,model_ofreser_porcentaje_maximo,devoo_ofreser.grupo_administracion_ordenes,1,1,1,1
+27,Mano de Obra Utilizada,model_ofreser_mano_de_obra_utilizada,devoo_ofreser.grupo_administracion_ordenes,1,1,1,1
+28,Productos Utilizados,model_ofreser_producto_consumido,devoo_ofreser.grupo_administracion_ordenes,1,1,1,1
+29,Promotores de Orden,model_ofreser_promotor,devoo_ofreser.grupo_administracion_ordenes,1,1,1,1
+30,Movilidad Utilizada,model_ofreser_movilidad_utilizada,devoo_ofreser.grupo_administracion_ordenes,1,1,1,1
+31,Maquinas Utilizadas,model_ofreser_maquina_utilizada,devoo_ofreser.grupo_administracion_ordenes,1,1,1,1
+32,Rubros,model_ofreser_rubro,devoo_ofreser.grupo_administracion_ordenes,1,1,1,1
+33,Liquidacion,model_ofreser_liquidacion,devoo_ofreser.grupo_administracion_ordenes,1,1,1,1
+34,Mano de Obra Liquidacion,model_ofreser_mano_de_obra_liquidacion,devoo_ofreser.grupo_administracion_ordenes,1,1,1,1
+35,Liquidacion en Lote,model_ofreser_liquidacion_en_lote,devoo_ofreser.grupo_administracion_ordenes,1,1,1,1
+,,,,,,,
+36,Ordenes de trabajo,model_ofreser_orden_de_trabajo,devoo_ofreser.grupo_operadores,1,1,0,0
+37,Mano de Obra Utilizada,model_ofreser_mano_de_obra_utilizada,devoo_ofreser.grupo_operadores,1,1,1,1
+38,Productos Utilizados,model_ofreser_producto_consumido,devoo_ofreser.grupo_operadores,1,1,1,1
+39,Promotores de Orden,model_ofreser_promotor,devoo_ofreser.grupo_operadores,1,1,1,1
+40,Movilidad Utilizada,model_ofreser_movilidad_utilizada,devoo_ofreser.grupo_operadores,1,1,1,1
+41,Maquinas Utilizadas,model_ofreser_maquina_utilizada,devoo_ofreser.grupo_operadores,1,1,1,1
+42,Rubros,model_ofreser_rubro,devoo_ofreser.grupo_operadores,1,0,1,0
+43,Tipo de Trabajo,model_ofreser_tipo_de_trabajo,devoo_ofreser.grupo_operadores,1,0,0,0
+44,Maquinas,model_ofreser_maquina,devoo_ofreser.grupo_operadores,1,0,0,0
+45,Certificados,model_ofreser_certificado,devoo_ofreser.grupo_operadores,1,1,1,0
+46,Porcentajes Máximos,model_ofreser_porcentaje_maximo,devoo_ofreser.grupo_operadores,1,0,0,0

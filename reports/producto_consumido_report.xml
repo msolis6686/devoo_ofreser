@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <report
+            id="producto_consumido_report"
+            string="Productos_consumidos"
+            model="ofreser.producto_consumido_wizard"
+            report_type="qweb-pdf"
+            name="devoo_ofreser.producto_consumido"
+            file="devoo_ofreser.producto_consumido"
+            menu = "False"
+        />
+
+    </data>
+</odoo>

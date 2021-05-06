@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="ofreser_vencimientos_wizard_form_view" model="ir.ui.view">
+            <field name="name">ofreser.vencimientos_wizard_form_view</field>
+            <field name="model">ofreser.vencimientos_wizard</field>
+            <field name="arch" type="xml">
+              <form string="Vencimientos">
+                <header>
+                    <button type="object" name="action_imprimir" string="Imprimir" class="oe_higlight oe_btn"/>
+                </header>
+                <group col="4">
+                  <field name="fecha_desde" colspan="2"/>
+                  <field name="fecha_hasta" colspan="2"/>
+                  <field name="promotor_id" colspan="4"/>
+                </group>
+                <label for="orden_de_trabajo_ids"></label>
+                <field name="orden_de_trabajo_ids">
+                    <tree create="false" edit="false" delete="false">
+                        <field name="promotor_id"/>
+                        <field name="numero_comprobante"/>
+                        <field name="cliente_id"/>
+                        <field name="fecha_servicio" widget="date"/>
+                        <field name="fecha_vencimiento"/>
+                        <field name="domicilio"/>
+                        <field name="telefono"/>
+                        <field name="movil"/>
+                        <field name="email"/>
+                        <field name="precio"/>
+                    </tree>
+                </field>
+              </form>
+            </field>
+        </record>
+
+        <record id="ofreser_vencimientos_wizard_action" model="ir.actions.act_window">
+            <field name="name">Vencimientos</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">ofreser.vencimientos_wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+        </record>
+
+    </data>
+</odoo>

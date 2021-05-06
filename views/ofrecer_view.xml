@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- <menuitem id="menu_usuarios" name="Usuarios" sequence="1"/> -->
+
+        <menuitem id="menu_orden_de_trabajo" name="Ordenes de Trabajo" sequence="-20" groups="devoo_ofreser.grupo_administracion_ordenes,devoo_ofreser.grupo_secretario"/>
+          <menuitem id="menu_orden_de_trabajo_submenu" name="Ordenes de Trabajo" parent="menu_orden_de_trabajo" sequence="-20" />
+          
+          <menuitem id="menu_orden_de_trabajo_reportes" name="Reportes" parent="menu_orden_de_trabajo" sequence="20" />
+            <menuitem id="menu_orden_de_trabajo_reportes_vencimientos" name="Vencimientos" parent="menu_orden_de_trabajo_reportes" action="ofreser_vencimientos_wizard_action" sequence="10" />
+            <menuitem id="menu_orden_de_trabajo_reportes_certificados" name="Crear Certificados" parent="menu_orden_de_trabajo_reportes" action="ofreser_certificados_wizard_action" sequence="20" />
+            <menuitem id="menu_orden_de_trabajo_reportes_prod_consumido" name="Productos Consumidos" parent="menu_orden_de_trabajo_reportes" action="ofreser_producto_consumido_wizard_action" sequence="30" />
+
+          <menuitem id="menu_orden_de_trabajo_configuracion" name="Configuración" parent="menu_orden_de_trabajo" sequence="40" />
+
+        <!-- PRODUCT.TEMPLATE VIEW -->
+        <record id="ofreser_productos_action" model="ir.actions.act_window">
+            <field name="name">Productos</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.template</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="menu_orden_de_trabajo_configuracion_productos"
+                  name="Productos"
+                  parent="menu_orden_de_trabajo_configuracion"
+                  action="ofreser_productos_action"
+                  sequence="1" />
+    
+    </data>
+</odoo>

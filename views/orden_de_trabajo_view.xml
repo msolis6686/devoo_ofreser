@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- VISTA FORM -->
+        <record id="ofreser_orden_de_trabajo_form_view" model="ir.ui.view">
+            <field name="name">ofreser.orden_de_trabajo_form_view</field>
+            <field name="model">ofreser.orden_de_trabajo</field>
+            <field name="arch" type="xml">
+              <form string="Usuarios">
+                <header>
+                  <button string="Enviar mail" type="object" name="send_mail"/>
+                  <button string="Iniciar" type="object" name="iniciar_orden_de_trabajo" attrs="{'invisible': [('estado','!=','en_espera')]}"/>
+	                <button string="Finalizar" type="object" name="finalizar_orden_de_trabajo" attrs="{'invisible': [('estado','!=','en_proceso')]}"/>
+	                <button string="Reprogramar" type="object" name="reprogramar_orden_de_trabajo" attrs="{'invisible': [('estado','!=',('en_espera'))]}"/>
+	                <button string="A espera" type="object" name="a_espera_orden_de_trabajo" attrs="{'invisible': [('estado','!=',('reprogramar'))]}"/>
+	                <button string="Cancelar" type="object" name="cancelar_orden_de_trabajo" attrs="{'invisible': [('estado','in',('cancelado','finalizado'))]}"/>
+                  <button string="Ver Liquidacion" type="object" name="see_liquidacion" attrs="{'invisible': [('estado','!=',('finalizado'))]}"/>
+                  <field name="estado" widget="statusbar" statusbar_visible="en_espera,en_proceso,finalizado"/>
+                </header>
+                <group invisible="1">
+                  <field name="user_es_admin"/>
+                </group>
+                <group col="4">
+                  <field name="numero_comprobante" readonly="1" colspan="4" attrs="{'readonly':[('estado','=','finalizado'),('user_es_admin','=',False)]}"/>
+                  <field name="usa_certificado" colspan="2" attrs="{'readonly':[('estado','=','finalizado'),('user_es_admin','=',False)]}"/>
+                  <field name="certificado_id" domain="[('estado','=','no_usado')]" attrs="{'invisible':[('usa_certificado','=', False)],'readonly':[('estado','=','finalizado'),('user_es_admin','=',False)]}" colspan="2"/>
+                  <field name="fecha_servicio" colspan="4" attrs="{'readonly':[('estado','=','finalizado'),('user_es_admin','=',False)]}"/>
+                  <field name="fecha_vencimiento" widget="date" colspan="4" attrs="{'readonly':[('estado','=','finalizado'),('user_es_admin','=',False)]}"/>
+                  <field name="aviso_vencimiento" colspan="2" attrs="{'invisible':[('estado','!=','finalizado')]}"/>
+                  <field name="fecha_aviso_vencimiento" colspan="2" attrs="{'invisible':[('estado','!=','finalizado')]}"/>
+                  <field name="nuevo" colspan="4" attrs="{'readonly':[('estado','=','finalizado'),('user_es_admin','=',False)]}"/>
+                  <field name="partner_id" colspan="2" attrs="{'readonly':[('estado','=','finalizado'),('user_es_admin','=',False)]}" context="{'with_address':True}"/>
+                  <field name="cuit" colspan="2" attrs="{'readonly':[('estado','=','finalizado'),('user_es_admin','=',False)]}"/>
+                  <field name="contacto" colspan="4" attrs="{'readonly':[('estado','=','finalizado'),('user_es_admin','=',False)]}"/>
+                  <field name="domicilio" colspan="4" attrs="{'readonly':[('estado','=','finalizado'),('user_es_admin','=',False)]}"/>
+                  <field name="telefono" colspan="4" attrs="{'readonly':[('estado','=','finalizado'),('user_es_admin','=',False)]}"/>
+                  <field name="movil" colspan="4" attrs="{'readonly':[('estado','=','finalizado'),('user_es_admin','=',False)]}"/>
+                  <field name="email" colspan="4" attrs="{'readonly':[('estado','=','finalizado'),('user_es_admin','=',False)]}"/>
+                  <field name="rubro_id" colspan="4" attrs="{'readonly':[('estado','=','finalizado'),('user_es_admin','=',False)]}"/>
+                  <field name="turnos" colspan="4" attrs="{'readonly':[('estado','=','finalizado'),('user_es_admin','=',False)]}"/>
+                  <field name="duracion_turno" invisible="1" colspan="4" attrs="{'readonly':[('estado','=','finalizado'),('user_es_admin','=',False)]}"/>
+                  <field name="precio" colspan="4" attrs="{'readonly':[('estado','=','finalizado'),('user_es_admin','=',False)]}"/>
+                  <field name="factura" colspan="4" attrs="{'readonly':[('estado','=','finalizado'),('user_es_admin','=',False)]}"/>
+                  <field name="pagado" colspan="4" attrs="{'readonly':[('estado','=','finalizado'),('user_es_admin','=',False)]}"/>
+                  <field name="superficie_total_inmueble" colspan="4" attrs="{'readonly':[('estado','=','finalizado'),('user_es_admin','=',False)]}"/>
+                  <field name="superficie_total_tratada" colspan="4" attrs="{'readonly':[('estado','=','finalizado'),('user_es_admin','=',False)]}"/>
+                  <field name="tipos_de_trabajo_ids" widget="many2many_tags" colspan="4" attrs="{'readonly':[('estado','=','finalizado'),('user_es_admin','=',False)]}"/>
+                  <field name="mano_de_obra_utilizada_ids" colspan="4"  attrs="{'readonly':[('estado','=','finalizado'),('user_es_admin','=',False)]}">
+                    <tree editable="bottom">
+                      <field name="user_id"/>
+                      <field name="porcentaje"/>
+                    </tree>
+                  </field>
+                  <field name="productos_consumidos_ids" colspan="4" attrs="{'readonly':[('estado','=','finalizado'),('user_es_admin','=',False)]}">
+                    <tree editable="bottom">
+                      <field name="product_id"/>
+                      <field name="cantidad"/>
+                      <field name="uom_id" readonly="1"/>
+                    </tree>
+                  </field>
+                  <field name="promotores_ids" colspan="4" attrs="{'readonly':[('estado','=','finalizado'),('user_es_admin','=',False)]}">
+                    <tree editable="bottom">
+                        <field name="promotor_id"/>
+                        <field name="porcentaje"/>
+                      </tree>
+                  </field>
+                  <field name="movilidad_utilizadas_ids" colspan="4" attrs="{'readonly':[('estado','=','finalizado'),('user_es_admin','=',False)]}">
+                    <tree editable="bottom">
+                      <field name="movilidad_id"/>
+                      <field name="responsable_id"/>
+                      <field name="porcentaje"/>
+                    </tree>
+                  </field>
+                  <field name="maquinas_utilizadas_ids" colspan="4" attrs="{'readonly':[('estado','=','finalizado'),('user_es_admin','=',False)]}">
+                    <tree editable="bottom">
+                      <field name="maquina_id"/>
+                      <field name="responsable_id"/>
+                      <field name="porcentaje"/>
+                    </tree>
+                  </field>
+                  <field name="observaciones" colspan="4" attrs="{'readonly':[('estado','=','finalizado'),('user_es_admin','=',False)]}"/>
+                  <field name="firma_archivo" filename="firma_archivo_nombre" widget="image" colspan="4" attrs="{'readonly':[('estado','=','finalizado'),('user_es_admin','=',False)]}"/>
+                </group>
+              </form>
+            </field>
+        </record>
+
+        <!-- VISTA TREE -->
+        <record id="ofreser_orden_de_trabajo_tree_view" model="ir.ui.view">
+            <field name="name">ofreser.orden_de_trabajo_tree_view</field>
+            <field name="model">ofreser.orden_de_trabajo</field>
+            <field name="arch" type="xml">
+              <tree string="Usuarios">
+                <field name="numero_comprobante"/>
+                <field name="estado"/>
+                <field name="mano_de_obra_utilizada_display"/>
+                <field name="fecha_servicio"/>
+                <field name="fecha_vencimiento"/>
+                <field name="partner_id"/>
+                <field name="factura"/>
+                <field name="precio"/>
+                <field name="pagado"/>
+                <button name="registrar_pago_orden" type="object" attrs="{'invisible':[('pagado','=','si')]}" string="Pagado" class="oe_highlight"/>
+                <field name="aviso_vencimiento"/>
+                <field name="fecha_aviso_vencimiento"/>
+              </tree>
+            </field>
+        </record>
+
+        <record id="ofreser_orden_de_trabajo_search" model='ir.ui.view'>
+          <field name="name">Orden de Trabajo</field>
+          <field name="model">ofreser.orden_de_trabajo</field>
+          <field name="arch" type="xml">
+              <search name="Orden de trabajo">
+                <field name="numero_comprobante"/>
+                <field name="mano_de_obra_utilizada_display"/>
+                <!-- FILTROS -->
+                <filter string="Activos" name="activos" domain="[('estado','in',('en_espera','en_proceso','reprogramar'))]"></filter>
+                <filter string="En Espera" name="en_espera" domain="[('estado','=','en_espera')]"></filter>
+                <filter string="En Proceso" name="en_proceso" domain="[('estado','=','en_proceso')]"></filter>
+                <filter string="Reprogramar" name="reprogramar" domain="[('estado','=','reprogramar')]"></filter>
+                <filter string="Finalizados" name="finalizados" domain="[('estado','=','finalizado')]"></filter>
+                <filter string="Cancelados" name="cancelados" domain="[('estado','=','cancelado')]"></filter>
+                <filter string="Vencimientos esta semana" name="vencimientos" domain="[('fecha_vencimiento','&gt;=', ((context_today()).strftime('%Y-%m-%d'))), ('fecha_vencimiento','&lt;=', ((context_today()+datetime.timedelta(days=7)).strftime('%Y-%m-%d')))]"></filter>
+
+                <!-- AGRUPAMIENTOS -->
+                <filter string="Cliente" name="Cliente" context="{'group_by':'partner_id'}"/>
+                <filter string="Estado"
+                    name="Estado"
+                    domain="[]"
+                    context="{'group_by':'estado'}"/>
+                <filter string="Pagado"
+                    name="pagado"
+                    domain="[]"
+                    context="{'group_by':'pagado'}"/>
+                <filter string="Operador"
+                    name="operador"
+                    domain="[]"
+                    context="{'group_by':'mano_de_obra_utilizada_display'}"/>
+                <filter string="Por Día"
+                    name="por_dia"
+                    domain="[]"
+                    context="{'group_by':'fecha_servicio:day'}"/>
+              </search>
+            </field>
+        </record>
+
+        <record id="ofreser_orden_de_trabajo_action" model="ir.actions.act_window">
+            <field name="name">Orden de trabajo</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">ofreser.orden_de_trabajo</field>
+            <field name="context">{"search_default_activos":1,"search_default_por_dia":1}</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="menu_orden_de_trabajo_submenu_2"
+                  name="Ordenes de Trabajo"
+                  parent="menu_orden_de_trabajo_submenu"
+                  action="ofreser_orden_de_trabajo_action"
+                  sequence="10" />
+
+        <!-- VISTA DE MAXIMO DE PORCENTAJES -->
+        <record id="ofreser_porcentaje_maximo_form_view" model="ir.ui.view">
+            <field name="name">ofreser.porcentaje_maximo_form_view</field>
+            <field name="model">ofreser.porcentaje_maximo</field>
+            <field name="arch" type="xml">
+              <form string="Porcentaje Maximo">
+                <group>
+                  <field name="item_id"/>
+                  <field name="porcentaje_maximo"/>
+                </group>
+              </form>
+            </field>
+        </record>
+
+        <record id="ofreser_porcentaje_maximo_tree_view" model="ir.ui.view">
+            <field name="name">ofreser.porcentaje_maximo_tree_view</field>
+            <field name="model">ofreser.porcentaje_maximo</field>
+            <field name="arch" type="xml">
+              <tree string="Porcentaje Maximo">
+                <field name="item_id"/>
+                <field name="porcentaje_maximo"/>
+              </tree>
+            </field>
+        </record>
+
+        <record id="ofreser_porcentaje_maximo_action" model="ir.actions.act_window">
+            <field name="name">Porcentaje Maximo</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">ofreser.porcentaje_maximo</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="menu_porcentaje_maximo"
+                  name="Porcentajes Máximos"
+                  parent="menu_orden_de_trabajo_configuracion"
+                  action="ofreser_porcentaje_maximo_action"
+                  sequence="70" />
+
+        <!-- ACTION PARA EL MENHU AL TABLERO ODT -->
+        <record id="menu_tablero_odt_action" model="ir.actions.act_url">
+                <field name="name">TableroODT</field>
+                <field name="type">ir.actions.act_url</field>
+                <field name="target">self</field>
+                <field name="url">http://localhost:8069/odttablero</field>
+                <!-- <field name="url">http://clientes.ofreser.com.ar/odttablero</field> -->
+        </record>
+
+        <!-- Menu al tablero del celular -->
+        <menuitem id="menu_tablero_odt"
+                  name="Tablero ODT"
+                  action="menu_tablero_odt_action"
+                  sequence="-10" />
+
+    </data>
+</odoo>

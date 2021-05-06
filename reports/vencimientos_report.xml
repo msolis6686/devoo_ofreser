@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <report
+            id="vencimientos_report"
+            string="Vencimientos"
+            model="ofreser.vencimientos_wizard"
+            report_type="qweb-pdf"
+            name="devoo_ofreser.vencimientos_print"
+            file="devoo_ofreser.vencimientos_print"
+            menu = "False"
+        />
+
+    </data>
+</odoo>

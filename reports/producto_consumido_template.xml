@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="producto_consumido">
+        <t t-call="report.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <!-- <t t-call="report.external_layout"> -->
+                    <div class="page">
+                        <div class="container">
+                            <h1>Productos Consumidos</h1>
+                            <p>Operador: <span><t t-esc="doc.operador_id.name"/> </span></p>
+                            <p>Producto: <span><t t-esc="doc.producto_id.name"/> </span></p>
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <p>Desde: <t t-esc="doc.desde"  t-options="{'widget': 'date'}"/> </p>
+                                </div>
+                                <div class="col-xs-3">
+                                    <p>Hasta:<t t-esc="doc.hasta" t-options="{'widget': 'date'}"/></p>
+                                </div>
+                            </div>
+                            <table class="table">
+                                <thead>
+                                    <th>Orden</th>
+                                    <th>Fecha</th>
+                                    <th>Cliente</th>
+                                    <th>Tipo de Trabajos</th>
+                                    <th>Producto</th>
+                                    <th>Cantidad</th>
+                                    <th>Unidad</th>
+                                </thead>
+                                <tbody>
+                                    <!-- <t t-set="sum_cant" t-value="0"/> -->
+                                    <t t-foreach="doc.detalle_ids" t-as="detalle">
+                                        <tr>
+                                            <td><t t-esc="detalle.orden_de_trabajo_id.numero_comprobante"/></td>
+                                            <td><t t-esc="detalle.fecha" t-options="{'widget': 'date'}"/></td>
+                                            <td><t t-esc="detalle.cliente_id.name"/></td>
+                                            <td><t t-esc="detalle.tipo_de_trabajos"/></td>
+                                            <td><t t-esc="detalle.producto_id.name"/></td>
+                                            <td><t t-esc="detalle.cantidad"/></td>
+                                            <td><t t-esc="detalle.uom_id.name"/></td>
+                                        </tr>
+                                        <!-- <t t-set="sum_cant" t-value="sum_cant + detalle.cantidad"/> -->
+                                    </t>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><t t-esc="doc.total"/></td>
+                                        <td><t t-esc="doc.total_unidad.name"/></td>
+                                    </tr>
+                                </tbody>
+                                
+                            </table>
+                        </div>
+
+                    </div>
+                <!-- </t> -->
+            </t>
+        </t>
+    </template>
+</odoo>

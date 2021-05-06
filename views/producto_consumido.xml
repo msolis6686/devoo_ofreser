@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="ofreser_producto_consumido_tree_view" model="ir.ui.view">
+            <field name="name">ofreser.producto_consumido_tree_view</field>
+            <field name="model">ofreser.producto_consumido</field>
+            <field name="arch" type="xml">
+              <tree string="Usuarios" editable="bottom">
+                <field name="product_id"/>
+                <field name="cantidad"/>
+              </tree>
+            </field>
+        </record>
+
+    </data>
+</odoo>

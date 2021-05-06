@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="ofreser_tipo_de_trabajo_form_view" model="ir.ui.view">
+            <field name="name">ofreser.tipo_de_trabajo_form_view</field>
+            <field name="model">ofreser.tipo_de_trabajo</field>
+            <field name="arch" type="xml">
+              <form>
+                <group>
+                  <field name="name"/>
+                </group>
+              </form>
+            </field>
+        </record>
+
+        <record id="ofreser_tipo_de_trabajo_tree_view" model="ir.ui.view">
+            <field name="name">ofreser.tipo_de_trabajo_tree_view</field>
+            <field name="model">ofreser.tipo_de_trabajo</field>
+            <field name="arch" type="xml">
+              <tree editable="bottom">
+                <field name="name"/>
+                <field name="porcentaje_maximo_mano_obra"/>
+                <field name="porcentaje_maximo_promotores"/>
+              </tree>
+            </field>
+        </record>
+
+        <record id="ofreser_tipo_de_trabajo_action" model="ir.actions.act_window">
+            <field name="name">Tipo de Trabajo</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">ofreser.tipo_de_trabajo</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+        </record>
+
+        <menuitem id="menu_tipo_de_trabajo_menu"
+                  name="Tipos de Trabajos"
+                  parent="menu_orden_de_trabajo_configuracion"
+                  action="ofreser_tipo_de_trabajo_action"
+                  sequence="30" />
+
+    </data>
+</odoo>

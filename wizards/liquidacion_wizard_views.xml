@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="ofreser_liquidacion_wizard_form_view" model="ir.ui.view">
+            <field name="name">ofreser.liquidacion__wizard_form_view</field>
+            <field name="model">ofreser.liquidacion_wizard</field>
+            <field name="arch" type="xml">
+              <form string="Liquidación Wizard">
+                <group col="4">
+                  <field name="operador_id" colspan="4"/>
+                  <field name="fecha_desde" colspan="2" widget="Date"/>
+                  <field name="fecha_hasta" colspan="2" widget="Date"/>
+                  <field name="fecha_liquidacion" colspan="4"/>
+                </group>
+                <label for="detalle_liquidacion_ids" style="font-size:18px;"/>
+                <field name="detalle_liquidacion_ids">
+                    <tree editable="bottom">
+                        <field name="orden_de_trabajo_id"/>
+                        <field name="operador_id"/>
+                        <field name="mano_de_obra_liquidacion_id" invisible="1"/>
+                        <field name="liquidacion_id" invisible="1"/>
+                        <field name="cliente_id" />
+                        <field name="factura" />
+                        <field name="domicilio_cliente"/>
+                        <field name="fecha" widget="date"/>
+                        <field name="tipo_de_trabajos_ids"/>
+                        <field name="precio_orden_de_trabajo"/>
+                        <field name="pagado"/>
+                        <field name="porcentaje_mano_de_obra" sum="Total Mano de Obra"/>
+                        <field name="porcentaje_maquina" sum="Total Maquina"/>
+                        <field name="porcentaje_movilidad" sum="Total Movilidad"/>
+                        <field name="porcentaje_extra_bool" sum="Total Extra"/>
+                        <field name="porcentaje_extra" sum="Total Extra"/>
+                        <field name="porcentaje_promocion" sum="Total Promocion"/>
+                        <field name="total_a_pagar" sum="Total a pagar"/>
+                    </tree>
+                </field>
+                <button type="object" name="liquidar" string="Liquidar" class="oe_highlight"/>
+              </form>
+            </field>
+        </record>
+
+        <!-- <record id="ofreser_liquidacion_wizard_tree_view" model="ir.ui.view">
+            <field name="name">ofreser.liquidacion_wizard_tree_view</field>
+            <field name="model">ofreser.liquidacion_wizard</field>
+            <field name="arch" type="xml">
+              <tree string="Liquidación Wizard">
+                <field name="orden_de_trabajo_id"/>
+                <field name="cliente_id"/>
+                <field name="fecha_servicio"/>
+                <field name="domicilio"/>
+                <field name="precio"/>
+                <field name="cobrado"/>
+                <field name="saldo"/>
+                <field name="estado"/>
+              </tree>
+            </field>
+        </record> -->
+
+        <record id="ofreser_liquidacion_wizard_action" model="ir.actions.act_window">
+            <field name="name">Liquidación en Lote</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">ofreser.liquidacion_wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+        </record>
+
+        <menuitem id="menu_liquidacion_wizard"
+                  name="Liquidación en lote"
+                  parent="menu_orden_de_trabajo_submenu"
+                  action="ofreser_liquidacion_wizard_action"
+                  sequence="30" />
+
+    </data>
+</odoo>

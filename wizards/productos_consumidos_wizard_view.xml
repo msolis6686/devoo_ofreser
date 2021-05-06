@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="ofreser_productos_consumidos_wizard_form_view" model="ir.ui.view">
+            <field name="name">ofreser.productos_consumidos_wizard_form_view</field>
+            <field name="model">ofreser.producto_consumido_wizard</field>
+            <field name="arch" type="xml">
+              <form string="Productos Consumidos">
+                <header>
+                    <button type="object" name="calcular_consumos" string="Ver consumos" class="oe_higlight oe_btn"/>
+                    <button type="object" name="action_imprimir" string="Imprimir" class="oe_higlight"/>
+                </header>
+                <group col="4">
+                  <field name="desde" colspan="2"/>
+                  <field name="hasta" colspan="2"/>
+                  <field name="operador_id" colspan="4"/>
+                  <field name="producto_id" colspan="4"/>
+                </group>
+                <label for="detalle_ids"></label>
+                <field name="detalle_ids">
+                    <tree create="false" edit="false" delete="false">
+                        <field name="orden_de_trabajo_id"/>
+                        <field name="fecha" widget="date"/>
+                        <field name="cliente_id"/>
+                        <field name="tipo_de_trabajos"/>
+                        <field name="producto_id"/>
+                        <field name="cantidad"/>
+                        <field name="uom_id"/>
+                    </tree>
+                </field>
+                <div style="font-size:18px;width: 200px;position: absolute;right: 10px;">
+                    <label for="total" style="font-size: 18px;"></label>
+                    <field name="total" readonly="1" class="oe_inline" style="padding-right: 5px;"/>
+                    <field name="total_unidad" readonly="1" class="oe_inline"/>
+                </div>
+                <!-- div para que el form mantenga el tamaño porque el de arriba tiene posicion absoluta -->
+                <div style="height: 18px;"></div>
+              </form>
+            </field>
+        </record>
+
+        <record id="ofreser_producto_consumido_wizard_action" model="ir.actions.act_window">
+            <field name="name">producto_consumido</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">ofreser.producto_consumido_wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+        </record>
+
+    </data>
+</odoo>

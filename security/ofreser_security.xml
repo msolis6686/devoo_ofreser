@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="grupo_administracion" model="res.groups">
+            <field name="name">Administrativos</field>
+            <field name="comment">Administrativos</field>
+        </record>
+        <record id="grupo_normales" model="res.groups">
+            <field name="name">U. Normales</field>
+            <field name="comment">Usuarios Normales</field>
+        </record>
+
+        <record id="categoria_grupos_ofreser" model="ir.module.category">
+            <field name="name">Ofreser</field>
+        </record>
+
+        <record id="grupo_administracion_ordenes" model="res.groups">
+            <field name="name">Administracion</field>
+            <field name="category_id" eval="ref('devoo_ofreser.categoria_grupos_ofreser')"/>
+            <field name="implied_ids" eval="[(4, ref('fleet.fleet_group_manager'))]"/>
+        </record>
+        <record id="grupo_secretario" model="res.groups">
+            <field name="name">Secretario</field>
+            <field name="category_id" eval="ref('devoo_ofreser.categoria_grupos_ofreser')"/>
+            <field name="implied_ids" eval="[(4, ref('fleet.fleet_group_manager'))]"/>
+        </record>
+        <record id="grupo_operadores" model="res.groups">
+            <field name="name">Operadores</field>
+            <field name="category_id" eval="ref('devoo_ofreser.categoria_grupos_ofreser')"/>
+            <field name="implied_ids" eval="[(4, ref('fleet.fleet_group_manager'))]"/>
+        </record>
+
+    </data>
+</openerp>

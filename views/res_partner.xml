@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- VISTA FORM -->
+        <record id="ofreser_res_partner_form_view" model="ir.ui.view">
+            <field name="name">ofreser_res_partner_form_view</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <field name="website" position="before">
+                    <field name="cuit"/>
+                </field>
+                <field name="parent_id" position="after">
+                    <field name="razon_social" attrs="{'invisible':[('is_company','=',False)]}" placeholder="Razón Social"/>
+                </field>
+                <field name="category_id" position="after">
+                    <field name="rubro_id" attrs="{'invisible':[('is_company','=',False)]}" string="Rubro"/>
+                    <field name="promotor_id"/>
+                </field>
+                <xpath expr="//page[1]" position="before">
+                    <page string="Trabajos Realizados">
+                        <field name="orden_de_trabajo_ids">
+                            <tree>
+                                <field name="numero_comprobante"/>
+                                <field name="estado"/>
+                                <field name="fecha_servicio" widget="date"/>
+                                <field name="fecha_vencimiento" widget="date"/>
+                                <field name="partner_id"/>
+                                <field name="tipos_de_trabajo_display"/>
+                                <field name="factura"/>
+                                <field name="precio"/>
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- VISTA TREE -->
+        <record id="ofreser_res_partner_tree_view" model="ir.ui.view">
+            <field name="name">ofreser_res_partner_tree_view</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_tree"/>
+            <field name="arch" type="xml">
+                <field name="display_name" position="after">
+                    <field name="street" string="Domicilio"/>
+                </field>
+            </field>
+        </record>
+
+        <!-- VISTA SEARCH -->
+        <record id="ofreser_res_partner_search_view" model="ir.ui.view">
+            <field name="name">ofreser_res_partner_search_view</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_res_partner_filter"/>
+            <field name="arch" type="xml">
+            <xpath expr="//group[@name='group_by']" position="inside">
+                <filter name="promotor" string="Promotor" domain="[]" context="{'group_by' : 'promotor_id'}"/>
+            </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

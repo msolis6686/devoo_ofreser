@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="ofreser_certificado_search" model='ir.ui.view'>
+          <field name="name">Certificado</field>
+          <field name="model">ofreser.certificado</field>
+          <field name="arch" type="xml">
+              <search name="Certificado">
+                <!-- BUSQUEDAS -->
+                <field name="numero"/>
+                <field name="orden_de_trabajo_id"/>
+
+                <!-- FILTROS -->
+                <filter string="No Usados" name="no_usado" domain="[('estado','=','no_usado')]"></filter>
+                <filter string="Usados" name="usado" domain="[('estado','=','usado')]"></filter>
+                <filter string="Cancelados" name="cancelado" domain="[('estado','=','cancelado')]"></filter>
+
+                <!-- AGRUPAMIENTOS -->
+                <filter string="Estado"
+                    name="Estado"
+                    domain="[]"
+                    context="{'group_by':'estado'}"/>
+              </search>
+            </field>
+        </record>
+
+        <record id="ofreser_certificado_tree_view" model="ir.ui.view">
+            <field name="name">ofreser.certificado_tree_view</field>
+            <field name="model">ofreser.certificado</field>
+            <field name="arch" type="xml">
+              <tree string="Certificados" editable="bottom">
+                <field name="numero"/>
+                <field name="estado"/>
+                <field name="nota"/>
+                <field name="orden_de_trabajo_id" readonly="1"/>
+              </tree>
+            </field>
+        </record>
+
+        <record id="ofreser_certificado_action" model="ir.actions.act_window">
+            <field name="name">Certificado</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">ofreser.certificado</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+        </record>
+
+        <menuitem id="menu_certificado_menu"
+                  name="Certificados"
+                  parent="menu_orden_de_trabajo_reportes"
+                  action="ofreser_certificado_action"
+                  sequence="10"/>
+
+    </data>
+</odoo>

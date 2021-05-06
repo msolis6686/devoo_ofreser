@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+<template id="archivos_page" name="Archivos">
+    <t t-call="website.layout">
+      <div id="wrap">
+        <div class="oe_structure"/>
+        <div class="container">
+             <form action="/attachment/subir" method="post" enctype="multipart/form-data">
+                <ul class="nav nav-pills">
+                  <li class="active"><a data-toggle="pill" href="#arc_privados">Archivos Privados</a></li>
+                  <li><a data-toggle="pill" href="#arc_publicos">Información General</a></li>
+                  <li><a data-toggle="pill" href="#arc_usuario">Archivos subidos por el Usuario</a></li>
+                </ul>
+              <div class="tab-content">
+<!-- ################################################################################################################################################################# -->
+              <div id="arc_privados" class="col-md-12 tab-pane fade in active" style="margin: 10px 0;padding: 5px 30px 5px 15px;border: 1px solid #eee;border-left: 5px solid #eee;border-left-color: #428bca;border-radius: 5px"><h3>Archivos Privados</h3>
+                  <div class="row">
+    <div class="text-center text-muted" t-if="not valores['adjuntos_privados']">
+      <h1>No se encontraron archivos</h1>
+    </div>
+    <t t-if="valores['adjuntos_privados']">
+        <div class="col-md-3" style="margin: 10px 0;padding: 5px 5px 5px 5px;border: 1px solid #eee;border-color: #428bca;border-radius: 5px">
+            <span width="5%" class="fa fa-search"/><input style="width:95%;border:none" type="text" id="myInput" onkeyup="myFunction()" placeholder="  Buscar Archivo..."/>
+        </div>
+        <table id="tabla1" width="100%" class="table ">
+            <tbody>
+            <t t-if="vista!='lista'">
+                <t t-set="filas" t-value="(len(valores['adjuntos_privados'])/4)+1"/>
+                <t t-set="item" t-value="0"/>
+                <t t-foreach="filas" t-as="fila">
+                    <tr>
+                        <t t-foreach="range(4)" t-as="e">
+                            <td class="oe_grid oe-height-2 col-md-4">
+                                <t t-if="not item>=(len(valores['adjuntos_privados']))">
+                                    <div class="oe_product_cart">
+                                        <span t-if="(valores['adjuntos_privados'][item].extension).upper() in ['.PDF']" class="img img-responsive text-center fa fa-file-pdf-o" style="font-size: 40px;padding-top: 10px;padding-bottom: 10px;color:DARKRED"/>
+                                        <span t-if="(valores['adjuntos_privados'][item].extension).upper() in ['.PPTX','.PPT']" class="img img-responsive text-center fa fa-file-powerpoint-o" style="font-size: 40px;padding-top: 10px;padding-bottom: 10px;color:DARKORANGE"/>
+                                        <span t-if="(valores['adjuntos_privados'][item].extension).upper() in ['.JPG','.JPEG','.PNG','.GIF']" class="img img-responsive text-center fa fa-file-image-o" style="font-size: 40px;padding-top: 10px;padding-bottom: 10px;color:SILVER"/>
+                                        <span t-if="(valores['adjuntos_privados'][item].extension).upper() in ['.DOC','.DOCX']" class="img img-responsive text-center fa fa-file-word-o" style="font-size: 40px;padding-top: 10px;padding-bottom: 10px;color:ROYALBLUE"/>
+                                        <span t-if="(valores['adjuntos_privados'][item].extension).upper() in ['.XLS','.XLSX']" class="img img-responsive text-center fa fa-file-excel-o" style="font-size: 40px;padding-top: 10px;padding-bottom: 10px;color:DARKGREEN"/>
+                                        <span t-if="(valores['adjuntos_privados'][item].extension).upper() in ['.ZIP','.TAR','.RAR']" class="img img-responsive text-center fa fa-file-zip-o" style="font-size: 40px;padding-top: 10px;padding-bottom: 10px;color:INDIGO"/>
+                                        <span t-if="(valores['adjuntos_privados'][item].extension).upper() in ['.TXT']" class="img img-responsive text-center fa fa-file-text-o" style="font-size: 40px;padding-top: 10px;padding-bottom: 10px;color:SKYBLUE"/>
+                                        <span t-if="(valores['adjuntos_privados'][item].extension).upper() in ['','NINGUNA']" class="img img-responsive text-center fa fa-question-circle" style="font-size: 40px;padding-top: 10px;padding-bottom: 10px;"/>
+                                        <span t-if="(valores['adjuntos_privados'][item].extension).upper() in ['.JS']" class="img img-responsive text-center fa fa-coffee" style="font-size: 40px;padding-top: 10px;padding-bottom: 10px;color:RED"/>
+                                        <h5 class="media-heading text-center">
+                                        <a t-att-href="'/attachment/download?attachment_id=%i' % valores['adjuntos_privados'][item].id"><span class="fa fa-download"/> <span t-field="valores['adjuntos_privados'][item].name"/></a>
+                                        </h5>
+                                    </div>
+                                </t>
+                            </td>
+                            <t t-set="item" t-value="item+1"/>
+                        </t>
+                    </tr>
+                </t>
+            </t>
+            <t t-if="vista=='lista'">
+                <thead>
+                    <th class="col-md-1 text-center">Tipo</th>
+                    <th>Nombre</th>
+                </thead>
+                <t t-foreach="valores['adjuntos_privados']" t-as="fila">
+                    <tr>
+                        <td class="col-md-1">
+                            <span t-if="(fila[0].extension).upper() in ['.PDF']" class="img img-responsive text-center fa fa-file-pdf-o" style="color:DARKRED"/>
+                            <span t-if="(fila[0].extension).upper() in ['.PPTX','.PPT']" class="img img-responsive text-center fa fa-file-powerpoint-o" style="color:DARKORANGE"/>
+                            <span t-if="(fila[0].extension).upper() in ['.JPG','.JPEG','.PNG','.GIF']" class="img img-responsive text-center fa fa-file-image-o" style="color:SILVER"/>
+                            <span t-if="(fila[0].extension).upper() in ['.DOC','.DOCX']" class="img img-responsive text-center fa fa-file-word-o" style="color:ROYALBLUE"/>
+                            <span t-if="(fila[0].extension).upper() in ['.XLS','.XLSX']" class="img img-responsive text-center fa fa-file-excel-o" style="color:DARKGREEN"/>
+                            <span t-if="(fila[0].extension).upper() in ['.ZIP','.TAR','.RAR']" class="img img-responsive text-center fa fa-file-zip-o" style="color:INDIGO"/>
+                            <span t-if="(fila[0].extension).upper() in ['.TXT']" class="img img-responsive text-center fa fa-file-text-o" style="color:SKYBLUE"/>
+                            <span t-if="(fila[0].extension).upper() in ['','NINGUNA']" class="img img-responsive text-center fa fa-question-circle"/>
+                            <span t-if="(fila[0].extension).upper() in ['.JS']" class="img img-responsive text-center fa fa-coffee" style="color:RED"/></td>
+                        <td>
+                            <a t-att-href="'/attachment/download?attachment_id=%i' % fila.id"><span class="fa fa-download"/> <span t-field="fila.name"/></a>
+                        </td>
+                    </tr>
+                </t>
+            </t>
+            </tbody>
+        </table>
+    </t>
+                  </div>
+              </div>
+<!-- ################################################################################################################################################################# -->
+                  <div id="arc_publicos" class="col-md-12 tab-pane fade" style="margin: 10px 0;padding: 5px 30px 5px 15px;border: 1px solid #eee;border-left: 5px solid #eee;border-left-color: #428bca;border-radius: 5px"><h3>Información General</h3>
+                      <div class="row">
+        <div class="text-center text-muted" t-if="not valores['adjuntos_publicos']">
+          <h1>No se encontraron archivos</h1>
+        </div>
+        <t t-if="valores['adjuntos_publicos']">
+            <div class="col-md-3" style="margin: 10px 0;padding: 5px 5px 5px 5px;border: 1px solid #eee;border-color: #428bca;border-radius: 5px">
+                <span width="5%" class="fa fa-search"/><input style="width:95%;border:none" type="text" id="myInput2" onkeyup="myFunction2()" placeholder="  Buscar Archivo..."/>
+            </div>
+            <table id="tabla2" width="100%" class="table ">
+                <tbody>
+                <t t-if="vista!='lista'">
+                    <t t-set="filas" t-value="(len(valores['adjuntos_publicos'])/4)+1"/>
+                    <t t-set="item" t-value="0"/>
+                    <t t-foreach="filas" t-as="fila">
+                        <tr>
+                            <t t-foreach="range(4)" t-as="e">
+                                <td class="oe_grid oe-height-2 col-md-4">
+                                    <t t-if="not item>=(len(valores['adjuntos_publicos']))">
+                                        <div class="oe_product_cart">
+                                            <span t-if="(valores['adjuntos_publicos'][item].extension).upper() in ['.PDF']" class="img img-responsive text-center fa fa-file-pdf-o" style="font-size: 40px;padding-top: 10px;padding-bottom: 10px;color:DARKRED"/>
+                                            <span t-if="(valores['adjuntos_publicos'][item].extension).upper() in ['.PPTX','.PPT']" class="img img-responsive text-center fa fa-file-powerpoint-o" style="font-size: 40px;padding-top: 10px;padding-bottom: 10px;color:DARKORANGE"/>
+                                            <span t-if="(valores['adjuntos_publicos'][item].extension).upper() in ['.JPG','.JPEG','.PNG','.GIF']" class="img img-responsive text-center fa fa-file-image-o" style="font-size: 40px;padding-top: 10px;padding-bottom: 10px;color:SILVER"/>
+                                            <span t-if="(valores['adjuntos_publicos'][item].extension).upper() in ['.DOC','.DOCX']" class="img img-responsive text-center fa fa-file-word-o" style="font-size: 40px;padding-top: 10px;padding-bottom: 10px;color:ROYALBLUE"/>
+                                            <span t-if="(valores['adjuntos_publicos'][item].extension).upper() in ['.XLS','.XLSX']" class="img img-responsive text-center fa fa-file-excel-o" style="font-size: 40px;padding-top: 10px;padding-bottom: 10px;color:DARKGREEN"/>
+                                            <span t-if="(valores['adjuntos_publicos'][item].extension).upper() in ['.ZIP','.TAR','.RAR']" class="img img-responsive text-center fa fa-file-zip-o" style="font-size: 40px;padding-top: 10px;padding-bottom: 10px;color:INDIGO"/>
+                                            <span t-if="(valores['adjuntos_publicos'][item].extension).upper() in ['.TXT']" class="img img-responsive text-center fa fa-file-text-o" style="font-size: 40px;padding-top: 10px;padding-bottom: 10px;color:SKYBLUE"/>
+                                            <span t-if="(valores['adjuntos_publicos'][item].extension).upper() in ['','NINGUNA']" class="img img-responsive text-center fa fa-question-circle" style="font-size: 40px;padding-top: 10px;padding-bottom: 10px;"/>
+                                            <span t-if="(valores['adjuntos_publicos'][item].extension).upper() in ['.JS']" class="img img-responsive text-center fa fa-coffee" style="font-size: 40px;padding-top: 10px;padding-bottom: 10px;color:RED"/>
+                                            <h5 class="media-heading text-center">
+                                            <a t-att-href="'/attachment/download?attachment_id=%i' % valores['adjuntos_publicos'][item].id"><span class="fa fa-download"/> <span t-field="valores['adjuntos_publicos'][item].name"/></a>
+                                            </h5>
+                                        </div>
+                                    </t>
+                                </td>
+                                <t t-set="item" t-value="item+1"/>
+                            </t>
+                        </tr>
+                    </t>
+                </t>
+                <t t-if="vista=='lista'">
+                    <thead>
+                        <th class="col-md-1 text-center">Tipo</th>
+                        <th>Nombre</th>
+                    </thead>
+                    <t t-foreach="valores['adjuntos_publicos']" t-as="fila">
+                        <tr>
+                            <td class="col-md-1">
+                                <span t-if="(fila[0].extension).upper() in ['.PDF']" class="img img-responsive text-center fa fa-file-pdf-o" style="color:DARKRED"/>
+                                <span t-if="(fila[0].extension).upper() in ['.PPTX','.PPT']" class="img img-responsive text-center fa fa-file-powerpoint-o" style="color:DARKORANGE"/>
+                                <span t-if="(fila[0].extension).upper() in ['.JPG','.JPEG','.PNG','.GIF']" class="img img-responsive text-center fa fa-file-image-o" style="color:SILVER"/>
+                                <span t-if="(fila[0].extension).upper() in ['.DOC','.DOCX']" class="img img-responsive text-center fa fa-file-word-o" style="color:ROYALBLUE"/>
+                                <span t-if="(fila[0].extension).upper() in ['.XLS','.XLSX']" class="img img-responsive text-center fa fa-file-excel-o" style="color:DARKGREEN"/>
+                                <span t-if="(fila[0].extension).upper() in ['.ZIP','.TAR','.RAR']" class="img img-responsive text-center fa fa-file-zip-o" style="color:INDIGO"/>
+                                <span t-if="(fila[0].extension).upper() in ['.TXT']" class="img img-responsive text-center fa fa-file-text-o" style="color:SKYBLUE"/>
+                                <span t-if="(fila[0].extension).upper() in ['','NINGUNA']" class="img img-responsive text-center fa fa-question-circle"/>
+                                <span t-if="(fila[0].extension).upper() in ['.JS']" class="img img-responsive text-center fa fa-coffee" style="color:RED"/></td>
+                            <td>
+                                <a t-att-href="'/attachment/download?attachment_id=%i' % fila.id"><span class="fa fa-download"/> <span t-field="fila.name"/></a>
+                            </td>
+                        </tr>
+                    </t>
+                </t>
+                </tbody>
+            </table>
+        </t>
+                      </div>
+                  </div>
+<!-- ################################################################################################################################################################# -->
+                  <div id="arc_usuario" class="col-md-12 tab-pane fade" style="margin: 10px 0;padding: 5px 30px 5px 15px;border: 1px solid #eee;border-left: 5px solid #eee;border-left-color: #428bca;border-radius: 5px"><h3>Archivos subidos por el Usuario</h3>
+                      <div class="row">
+        <div class="text-center text-muted" t-if="not valores['adjuntos_personales']">
+          <h1>No se encontraron archivos</h1>
+        </div>
+        <t t-if="valores['adjuntos_personales']">
+            <div class="col-md-3" style="margin: 10px 0;padding: 5px 5px 5px 5px;border: 1px solid #eee;border-color: #428bca;border-radius: 5px">
+                <span width="5%" class="fa fa-search"/><input style="width:95%;border:none" type="text" id="myInput3" onkeyup="myFunction3()" placeholder="  Buscar Archivo..."/>
+            </div>
+            <table id="tabla3" width="100%" class="table ">
+                <tbody>
+                <t t-if="vista!='lista'">
+                    <t t-set="filas" t-value="(len(valores['adjuntos_personales'])/4)+1"/>
+                    <t t-set="item" t-value="0"/>
+                    <t t-foreach="filas" t-as="fila">
+                        <tr>
+                            <t t-foreach="range(4)" t-as="e">
+                                <td class="oe_grid oe-height-2 col-md-4">
+                                    <t t-if="not item>=(len(valores['adjuntos_personales']))">
+                                        <div class="oe_product_cart">
+                                            <span t-if="(valores['adjuntos_personales'][item].extension).upper() in ['.PDF']" class="img img-responsive text-center fa fa-file-pdf-o" style="font-size: 40px;padding-top: 10px;padding-bottom: 10px;color:DARKRED"/>
+                                            <span t-if="(valores['adjuntos_personales'][item].extension).upper() in ['.PPTX','.PPT']" class="img img-responsive text-center fa fa-file-powerpoint-o" style="font-size: 40px;padding-top: 10px;padding-bottom: 10px;color:DARKORANGE"/>
+                                            <span t-if="(valores['adjuntos_personales'][item].extension).upper() in ['.JPG','.JPEG','.PNG','.GIF']" class="img img-responsive text-center fa fa-file-image-o" style="font-size: 40px;padding-top: 10px;padding-bottom: 10px;color:SILVER"/>
+                                            <span t-if="(valores['adjuntos_personales'][item].extension).upper() in ['.DOC','.DOCX']" class="img img-responsive text-center fa fa-file-word-o" style="font-size: 40px;padding-top: 10px;padding-bottom: 10px;color:ROYALBLUE"/>
+                                            <span t-if="(valores['adjuntos_personales'][item].extension).upper() in ['.XLS','.XLSX']" class="img img-responsive text-center fa fa-file-excel-o" style="font-size: 40px;padding-top: 10px;padding-bottom: 10px;color:DARKGREEN"/>
+                                            <span t-if="(valores['adjuntos_personales'][item].extension).upper() in ['.ZIP','.TAR','.RAR']" class="img img-responsive text-center fa fa-file-zip-o" style="font-size: 40px;padding-top: 10px;padding-bottom: 10px;color:INDIGO"/>
+                                            <span t-if="(valores['adjuntos_personales'][item].extension).upper() in ['.TXT']" class="img img-responsive text-center fa fa-file-text-o" style="font-size: 40px;padding-top: 10px;padding-bottom: 10px;color:SKYBLUE"/>
+                                            <span t-if="(valores['adjuntos_personales'][item].extension).upper() in ['','NINGUNA']" class="img img-responsive text-center fa fa-question-circle" style="font-size: 40px;padding-top: 10px;padding-bottom: 10px;"/>
+                                            <span t-if="(valores['adjuntos_personales'][item].extension).upper() in ['.JS']" class="img img-responsive text-center fa fa-coffee" style="font-size: 40px;padding-top: 10px;padding-bottom: 10px;color:RED"/>
+                                            <h5 class="media-heading text-center">
+                                            <a t-att-href="'/attachment/download?attachment_id=%i' % valores['adjuntos_personales'][item].id"><span class="fa fa-download"/> <span t-field="valores['adjuntos_personales'][item].name"/></a>
+                                            </h5>
+                                        </div>
+                                    </t>
+                                </td>
+                                <t t-set="item" t-value="item+1"/>
+                            </t>
+                        </tr>
+                    </t>
+                </t>
+                <t t-if="vista=='lista'">
+                    <thead>
+                        <th class="col-md-1 text-center">Tipo</th>
+                        <th>Nombre</th>
+                    </thead>
+                    <t t-foreach="valores['adjuntos_personales']" t-as="fila">
+                        <tr>
+                            <td class="col-md-1">
+                                <span t-if="(fila[0].extension).upper() in ['.PDF']" class="img img-responsive text-center fa fa-file-pdf-o" style="color:DARKRED"/>
+                                <span t-if="(fila[0].extension).upper() in ['.PPTX','.PPT']" class="img img-responsive text-center fa fa-file-powerpoint-o" style="color:DARKORANGE"/>
+                                <span t-if="(fila[0].extension).upper() in ['.JPG','.JPEG','.PNG','.GIF']" class="img img-responsive text-center fa fa-file-image-o" style="color:SILVER"/>
+                                <span t-if="(fila[0].extension).upper() in ['.DOC','.DOCX']" class="img img-responsive text-center fa fa-file-word-o" style="color:ROYALBLUE"/>
+                                <span t-if="(fila[0].extension).upper() in ['.XLS','.XLSX']" class="img img-responsive text-center fa fa-file-excel-o" style="color:DARKGREEN"/>
+                                <span t-if="(fila[0].extension).upper() in ['.ZIP','.TAR','.RAR']" class="img img-responsive text-center fa fa-file-zip-o" style="color:INDIGO"/>
+                                <span t-if="(fila[0].extension).upper() in ['.TXT']" class="img img-responsive text-center fa fa-file-text-o" style="color:SKYBLUE"/>
+                                <span t-if="(fila[0].extension).upper() in ['','NINGUNA']" class="img img-responsive text-center fa fa-question-circle"/>
+                                <span t-if="(fila[0].extension).upper() in ['.JS']" class="img img-responsive text-center fa fa-coffee" style="color:RED"/></td>
+                            <td>
+                                <a t-att-href="'/attachment/download?attachment_id=%i' % fila.id"><span class="fa fa-download"/> <span t-field="fila.name"/></a>
+                            </td>
+                        </tr>
+                    </t>
+                </t>
+                </tbody>
+            </table>
+        </t>
+                      </div>
+             <div class="col-md-12" style="margin: 10px 0;padding: 5px 30px 5px 15px;border: 1px solid #eee;border-left: 5px solid #eee;border-left-color: #428bca;border-radius: 5px"><h3>Subir archivos</h3>
+                      <div class="row">
+                            <div class="form-group">
+                                    <label class="col-md-3 col-sm-4 control-label" for="ufile">Seleccione un archivo:</label>
+                                    <div class="col-md-7 col-sm-8">
+                                        <input class="input-file" id="fileInput" type="file" name="ufile"></input>
+                                        <span t-if="error.get('ufile')">Por favor intente subir de nuevo el archivo.</span>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Subir</button>
+                            </div>
+                      </div>
+              </div>
+                  </div>
+<!-- ################################################################################################################################################################# -->
+              </div>    
+          </form>
+        </div>
+        <div class="oe_structure"/>
+      </div>
+    </t>
+<!-- ################################################################################################################################################################# -->
+<script>
+function myFunction() {
+  // Declare variables 
+  var input, filter, table, tr, td, i;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("tabla1");
+  tr = table.getElementsByTagName("tr");
+
+  // Loop through all table rows, and hide those who don't match the search query
+  for (i = 0; tr.length > i; i++) {
+    td = tr[i].getElementsByTagName("td")[1];
+    if (td) {
+       as=td.getElementsByTagName("span")[1];
+        console.log(as)
+      if (as.innerHTML.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    } 
+  }
+}
+</script>
+<script>
+function myFunction2() {
+  // Declare variables 
+  var input, filter, table, tr, td, i;
+  input = document.getElementById("myInput2");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("tabla2");
+  tr = table.getElementsByTagName("tr");
+
+  // Loop through all table rows, and hide those who don't match the search query
+  for (i = 0; tr.length > i; i++) {
+    td = tr[i].getElementsByTagName("td")[1];
+    if (td) {
+       as=td.getElementsByTagName("span")[1];
+        console.log(as)
+      if (as.innerHTML.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    } 
+  }
+}
+</script>
+<script>
+function myFunction3() {
+  // Declare variables 
+  var input, filter, table, tr, td, i;
+  input = document.getElementById("myInput3");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("tabla3");
+  tr = table.getElementsByTagName("tr");
+
+  // Loop through all table rows, and hide those who don't match the search query
+  for (i = 0; tr.length > i; i++) {
+    td = tr[i].getElementsByTagName("td")[1];
+    if (td) {
+       as=td.getElementsByTagName("span")[1];
+        console.log(as)
+      if (as.innerHTML.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    } 
+  }
+}
+</script>
+
+<!-- ################################################################################################################################################################# -->
+
+</template>
+    </data>
+</odoo>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="ofreser_orden_de_trabajo_secuencia" model="ir.sequence">
+            <field name="name">Orden de Trabajo</field>
+            <field name="code">orden_de_trabajo_sequence</field>
+            <field name="implementation">no_gap</field>
+            <field name="padding">8</field>
+            <field name="number_increment">1</field>
+            <field name="prefix"></field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+  <data noupdate="0">
+    <template id="orden_de_trabajo_tablero">
+      <t t-call="website.layout">
+        <t t-set="title">Ofreser - Tablero de órdenes de trabajo</t>
+
+        <div class="main-wrapper">
+          <section class="header">
+          
+            <form action="/odttablero/busqueda" method="post" id="tablero_busqueda">
+              <div class="tablero_busqueda_wrap">
+                <input type="text" name="texto" class="tablero_busqueda_input"/>
+              </div>
+              <input type="submit" name="submit" value="Buscar" class="tablero_busqueda_boton"/>
+            </form>
+            <form action="/odttablero/filtro_fecha" method="post" id="tablero_filtro_fecha">
+              <div class="tablero-fecha">
+                  <div class="form-group">
+                      <div class='input-group date' id='tablero_fecha'>
+                          <t t-if="fecha_filtro">
+                            <input type='text' class="form-control" name="fecha_tablero" t-att-value="fecha_filtro"/>
+                          </t>
+                          <t t-if="not fecha_filtro">
+                            <t t-set="d_today" t-value="datetime.date.today().strftime('%d/%m/%Y')"/>
+                            <input type='text' class="form-control" name="fecha_tablero" t-att-value="d_today"/>
+                          </t>
+                          <span class="input-group-addon">
+                              <span class="glyphicon glyphicon-calendar"></span>
+                          </span>
+                      </div>
+                  </div>
+                  <input type="submit" value="Filtrar" class=" boton-buscar"/>
+              </div>
+            </form>
+            <div class="tablero-filtros">
+              <!-- BOTON EN ESPERA -->
+              <a href="/odttablero?estado=en_espera">
+                <t t-if="estado == 'en_espera'">
+                  <div class="boton boton-filtro active">En espera</div>
+                </t>
+                <t t-else="">
+                  <div class="boton boton-filtro">En espera</div>
+                </t>
+              </a>
+              <!-- BOTON EN PROCESO -->
+              <a href="/odttablero?estado=en_proceso">
+                <t t-if="estado == 'en_proceso'">
+                  <div class="boton boton-filtro active">En Proceso</div>
+                </t>
+                <t t-else="">
+                  <div class="boton boton-filtro">En Proceso</div>
+                </t>
+              </a>
+              <!-- BOTON EN REPROGRAMACION -->
+              <a href="/odttablero?estado=reprogramar">
+                <t t-if="estado == 'reprogramar'">
+                  <div class="boton boton-filtro active">Reprogramar</div>
+                </t>
+                <t t-else="">
+                  <div class="boton boton-filtro">Reprogramar</div>
+                </t>
+              </a>
+              <!-- BOTON FINALIZADOS -->
+              <a href="/odttablero?estado=finalizado">
+                <t t-if="estado == 'finalizado'">
+                  <div class="boton boton-filtro active">Finalizadas</div>
+                </t>
+                <t t-else="">
+                  <div class="boton boton-filtro">Finalizadas</div>
+                </t>
+              </a>
+              <!-- BOTON CANCELADO -->
+              <a href="/odttablero?estado=cancelado">
+                <t t-if="estado == 'cancelado'">
+                  <div class="boton boton-filtro active">Canceladas</div>
+                </t>
+                <t t-else="">
+                  <div class="boton boton-filtro">Canceladas</div>
+                </t>
+              </a>
+            </div>
+          </section>
+          <section class='tablero'>
+            <!-- LOOP DE CADA ORDEN DE TRABAJO NO CANCELADA NI FINALIZADA -->
+            <t t-foreach="ordenes" t-as="orden">
+              <div class='tablero-orden_de_trabajo'>
+                <div class="tablero-numero"><span class="label-bold">N° comprobante </span><t t-esc="orden.numero_comprobante"/></div>
+                <div class="tablero-numero"><span class="label-bold">Fecha </span><t t-esc="orden.get_fecha()"/></div>
+                <div class="tablero-cliente"><span class="label-bold">Cliente: </span><t t-esc="orden.partner_id.name"/></div>
+                <div class='tablero-estado'><t t-esc="dict(orden.fields_get(allfields=['estado'])['estado']['selection'])[orden.estado]"/></div>
+                <!-- <div class="tablero-estado"><t t-esc="orden.estado"/></div> -->
+                <div class="tablero-telefono"><span class="label-bold">Teléfono: </span><t t-esc="orden.telefono"/></div>
+                <div class="tablero-direccion"><span class="label-bold">Dirección: </span><t t-esc="orden.domicilio"/></div>
+                <div class="tablero-ver_mas_wrapper">
+                  <a t-att-href="'/odtindividual/%s' % orden.id">
+                    <div class="tablero-ver_mas">Ver más</div>
+                  </a>
+                </div>
+              </div>
+            </t>
+          </section>
+          <section class='footer'>
+
+          </section>
+        </div>
+
+
+        <script type="text/javascript">
+
+            $(function () {
+                $('#tablero_fecha').datetimepicker({
+                    language:'es',
+                    format: 'DD/MM/YYYY'
+                });
+            });
+        </script>
+      </t>
+    </template>
+  </data>
+</openerp>

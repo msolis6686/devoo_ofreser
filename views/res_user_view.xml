@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_hr_attachment_trew_ofre" model="ir.ui.view">
+            <field name="name">view_hr_attachment_trew_ofre</field>
+            <field name="model">ir.attachment</field>
+            <field name="inherit_id" ref="base.view_attachment_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='res_model']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+                <xpath expr="//field[@name='res_id']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+                <xpath expr="//field[@name='res_field']" position="replace">
+                    <field name="usuarios_ids"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_res_users_tree_ofre" model="ir.ui.view">
+            <field name="name">view_res_users_tree_ofre</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='lang']" position="replace">
+                    <field name="archivos_adjuntos" string="Archivos subidos"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_res_user_form_ofre" model="ir.ui.view">
+            <field name="name">view_res_user_form_ofre</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@class='oe_button_box']" position="replace">
+                    <div class="oe_button_box" name="button_box">
+                        <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-check">
+                            <field name="active" widget="boolean_button" options="{&quot;terminology&quot;: &quot;active&quot;}"/>
+                        </button>
+                        <button name="action_get_attachment_tree_view"
+                            class="oe_stat_button"
+                            icon="fa-book"
+                            type="object">
+                            <field name="archivos_adjuntos" widget="statinfo" string="Archivos subidos"/>
+                        </button>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+        <!-- Vista personalizada de Usuarios-->
+        <record id="view_users_form_ofreser" model="ir.ui.view">
+            <field name="name">res.users.form</field>
+            <field name="model">res.users</field>
+            <field name="arch" type="xml">
+                <form string="Usuarios">
+                    <header>
+                        <button string="Cambiar contraseña" type="action" name="%(base.change_password_wizard_action)d"/>
+                    </header>
+                    <sheet>
+                        <field name="id" invisible="1"/>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-check">
+                                <field name="active" widget="boolean_button" options="{&quot;terminology&quot;: &quot;active&quot;}"/>
+                            </button>
+                            <button name="action_get_attachment_tree_view"
+                                class="oe_stat_button"
+                                icon="fa-book"
+                                type="object">
+                                <field name="archivos_adjuntos" widget="statinfo" string="Archivos subidos"/>
+                            </button>
+                        </div>
+                        <field name="image" widget='image' class="oe_avatar" options='{"preview_image": "image_medium"}'/>
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only"/>
+                            <h1><field name="name" required="1"/></h1>
+                            <field name="email" invisible="1"/>
+                            <label for="login" class="oe_edit_only" string="Email Address"/>
+                            <h2><field name="login"/></h2>
+                            <group>
+                                <!--field name="partner_id" readonly="1" required="0" groups="base.group_no_one"
+                                        attrs="{'invisible': [('id', '=', False)]}"/-->
+                                <field name="archivos_ids" widget="many2many_tags"/>
+                            </group>
+                        </div>
+                        <!--notebook colspan="4">
+                            <page name="access_rights" string="Access Rights">
+                                <group string="Multi Companies" attrs="{'invisible': [('companies_count', '&lt;=', 1)]}">
+                                    <field string="Allowed Companies" name="company_ids" widget="many2many_tags"/>
+                                    <field string="Current Company" name="company_id" context="{'user_preference': 0}"/>
+                                    <field string="Companies count" name="companies_count" invisible="1"/>
+                                </group>
+                                <field name="groups_id"/>
+                            </page>
+                            <page string="Preferences">
+                                <group>
+                                    <group string="Localization" name="preferences">
+                                        <field name="lang"/>
+                                        <field name="tz" widget="timezone_mismatch" options="{'tz_offset_field': 'tz_offset'}" />
+                                        <field name="tz_offset" invisible="1"/>
+                                    </group>
+                                    <group string="Menus Customization" groups="base.group_no_one">
+                                        <field name="action_id"/>
+                                    </group>
+                                </group>
+                                <group string="Messaging and Social" name="messaging">
+                                    <field name="signature"/>
+                                </group>
+                            </page>
+                        </notebook-->
+                    </sheet>
+                </form>
+            </field>
+        </record>
+<!-- IR ATTACHMENT -->
+        <record id="view_ir_attachment_form_ofre" model="ir.ui.view">
+            <field name="name">view_ir_attachment_form_ofre</field>
+            <field name="model">ir.attachment</field>
+            <field name="inherit_id" ref="base.view_attachment_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group" position="after">
+                    <group string="Usuarios">
+                        <field name="usuarios_ids"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="action_archivos_ofreser" model="ir.actions.act_window">
+            <field name="name">Archivos</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">ir.attachment</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('res_model','=','res.users')]</field>
+            <field name="context">{'default_res_model':'res.users','default_res_id':uid}</field>
+        </record>
+
+        <record id="action_res_users_ofreser" model="ir.actions.act_window">
+            <field name="name">Usuarios</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.users</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('create_uid','=',5)]</field>
+        </record>
+
+        <record id="action_res_users_view1_ofreser" model="ir.actions.act_window.view">
+            <field eval="10" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="base.view_users_tree"/>
+            <field name="act_window_id" ref="action_res_users_ofreser"/>
+        </record>
+        <record id="action_res_users_view2_ofreser" model="ir.actions.act_window.view">
+            <field eval="20" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_users_form_ofreser"/>
+            <field name="act_window_id" ref="action_res_users_ofreser"/>
+        </record>
+
+        <menuitem id="menu_usuarios" name="Usuarios" sequence="1"/>
+        <menuitem id="menu_archivos_submenu" name="Archivos" parent="menu_usuarios" sequence="1" action="action_archivos_ofreser" groups="devoo_ofreser.grupo_administracion"/>
+        <menuitem id="menu_usuarios_submenu" name="Usuarios" parent="menu_usuarios" sequence="2" action="action_res_users_ofreser" groups="devoo_ofreser.grupo_administracion"/>
+    </data>
+</odoo>
