@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="ofreser_liquidacion_form_view" model="ir.ui.view">
+            <field name="name">ofreser.liquidacion_form_view</field>
+            <field name="model">ofreser.liquidacion</field>
+            <field name="arch" type="xml">
+              <form string="Liquidación">
+                <group>
+                  
+                  <field name="orden_de_trabajo_id" readonly="1"/>
+                  <field name="estado"/>
+                  <field name="fecha_servicio"/>
+                  <field name="cliente_id"/>
+                  <field name="domicilio"/>
+                  <field name="tipos_de_trabajo_ids" widget="many2many_tags"/>
+                  <field name="precio"/>
+                  <field name="cobrado" attrs="{'readonly':[('estado','=','liquidado')]}"/>
+                  <field name="saldo" attrs="{'readonly':[('estado','=','liquidado')]}"/>
+                  <field name="certificado_id"/>
+                  <field name="factura"/>
+                  <field name="mano_de_obra_liquidacion_ids" attrs="{'readonly':[('estado','=','liquidado')]}">
+                    <tree editable="bottom" delete="false" create="false">
+                      <field name="empleado_id"/>
+                      <field name="porcentaje_num_mano_de_obra"/>
+                      <field name="porcentaje_mano_de_obra"/>
+                      <field name="porcentaje_num_maquina"/>
+                      <field name="porcentaje_maquina"/>
+                      <field name="porcentaje_num_movilidad"/>
+                      <field name="porcentaje_movilidad"/>
+                      <field name="porcentaje_num_promocion"/>
+                      <field name="porcentaje_promocion"/>
+                      <field name="porcentaje_extra"/>
+                      <field name="total_a_pagar"/>
+                      <field name="monto_pagado"/>
+                      <field name="saldo_a_pagar"/>
+                      <field name="liquidado"/>
+                    </tree>
+                  </field>
+                  <field name="observaciones" attrs="{'readonly':[('estado','=','liquidado')]}"/>
+                </group>
+              </form>
+            </field>
+        </record>
+
+        <record id="ofreser_liquidacion_tree_view" model="ir.ui.view">
+            <field name="name">ofreser.liquidacion_tree_view</field>
+            <field name="model">ofreser.liquidacion</field>
+            <field name="arch" type="xml">
+              <tree string="Liquidación">
+                <field name="orden_de_trabajo_id"/>
+                <field name="cliente_id"/>
+                <field name="fecha_servicio"/>
+                <field name="domicilio"/>
+                <field name="precio"/>
+                <field name="cobrado"/>
+                <field name="saldo"/>
+                <field name="estado"/>
+              </tree>
+            </field>
+        </record>
+
+        <record id="ofreser_liquidacion_action" model="ir.actions.act_window">
+            <field name="name">Liquidación</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">ofreser.liquidacion</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="menu_liquidacion_submenu_2"
+                  name="Liquidaciones por Ordenes"
+                  parent="menu_orden_de_trabajo_submenu"
+                  action="ofreser_liquidacion_action"
+                  sequence="40" />
+
+
+      <!-- LIQUIDACION DE MANO DE OBRA -->
+      <record id="ofreser_mano_de_obra_liquidacion_form_view" model="ir.ui.view">
+          <field name="name">ofreser.mano_de_obra_liquidacion_form_view</field>
+          <field name="model">ofreser.mano_de_obra_liquidacion</field>
+          <field name="arch" type="xml">
+            <form string="Liquidación">
+              <group>
+                
+                <field name="liquidacion_id" readonly="1"/>
+
+              </group>
+            </form>
+          </field>
+      </record>
+
+      <record model="ir.ui.view" id="ofreser_mano_de_obra_liquidacion_search_view">
+        <field name="name">ofreser.mano_de_obra_liquidacion_form_view</field>
+        <field name="model">ofreser.mano_de_obra_liquidacion</field>
+        <field name="priority" eval="14"/>
+        <field name="arch" type="xml">
+          <search name="Liquidacion">
+            <filter string="Sin liquidar" name="sin_liquidar" domain="[('liquidado','=',False)]"/>
+            <filter string="Liquidadas" domain="[('liquidado','=',True)]"/>
+            <filter string="Liquidado" context="{'group_by':'liquidado'}"/>
+            <filter string="Liquidado" context="{'group_by':'liquidado'}"/>
+            <filter string="Operador" context="{'group_by':'empleado_id'}"/>
+          </search>
+        </field>
+      </record>
+
+      <record id="ofreser_mano_de_obra_liquidacion_tree_view" model="ir.ui.view">
+        <field name="name">ofreser.mano_de_obra_liquidacion_tree_view</field>
+        <field name="model">ofreser.mano_de_obra_liquidacion</field>
+        <field name="arch" type="xml">
+          <tree string="Liquidación" editable="bottom">
+            <field name="liquidacion_id"/>
+            <field name="empleado_id"/>
+            <field name="fecha" widget="date"/>
+            <field name="porcentaje_mano_de_obra" sum="Total Mano de Obra"/>
+            <field name="porcentaje_maquina" sum="Total Maquina"/>
+            <field name="porcentaje_movilidad" sum="Total Movilidad"/>
+            <field name="porcentaje_extra" sum="Total Extra"/>
+            <field name="porcentaje_promocion" sum="Total Promocion"/>
+            <field name="total_a_pagar" sum="Total a pagar"/>
+            <field name="liquidado"/>
+            <field name="fecha_liquidacion"/>
+          </tree>
+        </field>
+    </record>
+
+    <record id="ofreser_mano_de_obra_liquidacion_action" model="ir.actions.act_window">
+        <field name="name">Liquidación</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">ofreser.mano_de_obra_liquidacion</field>
+        <field name="context">{"search_default_sin_liquidar":1}</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree</field>
+    </record>
+
+    <menuitem id="menu_mano_de_obra_liquidacion_submenu_2"
+              name="Liquidaciones"
+              parent="menu_orden_de_trabajo_submenu"
+              action="ofreser_mano_de_obra_liquidacion_action"
+              sequence="20" />
+
+
+    <!-- VISTAS DE LIQUIDACIONES EN LOTE -->
+    <!-- VISTA FORM -->
+    <record id="ofreser_liquidacion_en_lote_form_view" model="ir.ui.view">
+        <field name="name">ofreser.liquidacion_en_lote_form_view</field>
+        <field name="model">ofreser.liquidacion_en_lote</field>
+        <field name="arch" type="xml">
+          <form string="Liquidación en Lote">
+            <header>
+              <button type="object" name="liquidar" string="Liquidar" class="oe_highlight" attrs="{'invisible':[('liquidada','=',True)]}"/>
+              <button string="Imprimir" type="object" name="imprimir"/>
+            </header>
+
+            <group col="4">
+              <field name="liquidada" invisible="1" colspan="4"/>
+              <field name="operador_id" colspan="4"/>
+              <field name="fecha_desde" colspan="2"/>
+              <field name="fecha_hasta" colspan="2"/>
+              <field name="fecha_liquidacion" colspan="4"/>
+            </group>
+            <label for="detalle_liquidacion_ids" attrs="{'invisible':[('liquidada','=',True)]}"/>
+            <field name="detalle_liquidacion_ids" attrs="{'invisible':[('liquidada','=',True)]}">
+              <tree editable="bottom">
+                <field name="orden_de_trabajo_id"/>
+                <field name="operador_id"/>
+                <field name="mano_de_obra_liquidacion_id" invisible="1"/>
+                <field name="liquidacion_id" invisible="1"/>
+                <field name="cliente_id" />
+                <field name="domicilio_cliente"/>
+                <field name="fecha" widget="date"/>
+                <field name="tipo_de_trabajos_ids"/>
+                <field name="precio_orden_de_trabajo"/>
+                <field name="pagado"/>
+                <field name="porcentaje_num_mano_de_obra"/>
+                <field name="porcentaje_mano_de_obra" sum="Total Mano de Obra"/>
+                <field name="porcentaje_num_maquina"/>
+                <field name="porcentaje_maquina" sum="Total Maquina"/>
+                <field name="porcentaje_num_movilidad"/>
+                <field name="porcentaje_movilidad" sum="Total Movilidad"/>
+                <field name="porcentaje_num_promocion"/>
+                <field name="porcentaje_promocion" sum="Total Promocion"/>
+                <field name="porcentaje_extra_bool" sum="Total Extra"/>
+                <field name="porcentaje_extra" sum="Total Extra"/>
+                <field name="total_a_pagar" sum="Total a pagar"/>
+              </tree>
+            </field>
+            <label for="liquidacion_ids" attrs="{'invisible':[('liquidada','=',False)]}"/>
+            <field name="liquidacion_ids" attrs="{'invisible':[('liquidada','=',False)]}">
+              <tree>
+                <field name="liquidacion_id"/>
+                <field name="cliente_id"/>
+                <field name="domicilio"/>
+                <field name="fecha" widget="date"/>
+                <field name="porcentaje_num_mano_de_obra"/>
+                <field name="porcentaje_mano_de_obra" sum="Total Mano de Obra"/>
+                <field name="porcentaje_num_maquina"/>
+                <field name="porcentaje_maquina" sum="Total Maquina"/>
+                <field name="porcentaje_num_movilidad"/>
+                <field name="porcentaje_movilidad" sum="Total Movilidad"/>
+                <field name="porcentaje_num_promocion"/>
+                <field name="porcentaje_promocion" sum="Total Promocion"/>
+                <field name="porcentaje_extra" sum="Total Extra"/>
+                <field name="total_a_pagar" sum="Total a pagar"/>
+                <field name="liquidado"/>
+                <field name="fecha_liquidacion"/>
+              </tree>
+            </field>
+          </form>
+        </field>
+    </record>
+
+    <record id="ofreser_liquidacion_en_lote_tree_view" model="ir.ui.view">
+        <field name="name">ofreser.liquidacion_en_lote_tree_view</field>
+        <field name="model">ofreser.liquidacion_en_lote</field>
+        <field name="arch" type="xml">
+          <tree string="Liquidación en Lote">
+            <field name="operador_id"/>
+            <field name="fecha_desde"/>
+            <field name="fecha_hasta"/>
+            <field name="monto_total"/>
+            <field name="fecha_liquidacion"/>
+          </tree>
+        </field>
+    </record>
+
+    <record id="ofreser_liquidacion_en_lote_action" model="ir.actions.act_window">
+        <field name="name">Liquidación en Lote</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">ofreser.liquidacion_en_lote</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_liquidacion_en_lote_submenu_2"
+              name="Liquidacion en Lotes"
+              parent="menu_orden_de_trabajo_submenu"
+              action="ofreser_liquidacion_en_lote_action"
+              sequence="45" />
+
+    </data>
+</odoo>
