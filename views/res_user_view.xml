@@ -71,7 +71,7 @@
                                 <field name="archivos_adjuntos" widget="statinfo" string="Archivos subidos"/>
                             </button>
                         </div>
-                        <field name="image" widget='image' class="oe_avatar" options='{"preview_image": "image_medium"}'/>
+                        <field name="image_256" widget='image' class="oe_avatar" options='{"preview_image": "image_medium"}'/>
                         <div class="oe_title">
                             <label for="name" class="oe_edit_only"/>
                             <h1><field name="name" required="1"/></h1>
@@ -131,7 +131,7 @@
             <field name="name">Archivos</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">ir.attachment</field>
-            <field name="view_type">form</field>
+            
             <field name="view_mode">tree,form</field>
             <field name="domain">[('res_model','=','res.users')]</field>
             <field name="context">{'default_res_model':'res.users','default_res_id':uid}</field>
@@ -141,7 +141,7 @@
             <field name="name">Usuarios</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">res.users</field>
-            <field name="view_type">form</field>
+            
             <field name="view_mode">tree,form</field>
             <field name="domain">[('create_uid','=',5)]</field>
         </record>

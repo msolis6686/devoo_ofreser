@@ -9,9 +9,9 @@ O.FRE.SER
 ======================
     """,
     'category': 'O.FRE.SER',
-    'website': 'http://http://www.ofreser.com.ar//',
+    'website': 'https://www.ofreser.com.ar/',
     'images': [],
-    'author': 'DevooGroup',
+    'author': 'BlackFish-Team',
     'depends': ['website',
                 'product',
                 'fleet',

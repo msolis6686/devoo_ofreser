@@ -111,7 +111,7 @@
           <field name="name">Orden de Trabajo</field>
           <field name="model">ofreser.orden_de_trabajo</field>
           <field name="arch" type="xml">
-              <search name="Orden de trabajo">
+              <search string="Orden de trabajo">
                 <field name="numero_comprobante"/>
                 <field name="mano_de_obra_utilizada_display"/>
                 <!-- FILTROS -->
@@ -150,7 +150,7 @@
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">ofreser.orden_de_trabajo</field>
             <field name="context">{"search_default_activos":1,"search_default_por_dia":1}</field>
-            <field name="view_type">form</field>
+            
             <field name="view_mode">tree,form</field>
         </record>
 
@@ -189,7 +189,7 @@
             <field name="name">Porcentaje Maximo</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">ofreser.porcentaje_maximo</field>
-            <field name="view_type">form</field>
+            
             <field name="view_mode">tree,form</field>
         </record>
 

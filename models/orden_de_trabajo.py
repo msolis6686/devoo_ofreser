@@ -124,7 +124,7 @@ class OfreserOrdenDeTrabajo(models.Model):
     ######################################################
     # COMPUTED
     ######################################################
-    @api.one
+    #@api.one
     def _compute_user_es_admin(self):
         # import pdb; pdb.set_trace()
         self.user_es_admin = self.env.user.has_group('devoo_ofreser.grupo_administracion_ordenes')
@@ -282,7 +282,7 @@ class OfreserOrdenDeTrabajo(models.Model):
             res.set_certificado()
         return res
 
-    @api.multi
+    #@api.multi
     def write(self, vals):
         res = super(OfreserOrdenDeTrabajo, self).write(vals)
         # self.validar_tipos_de_trabajo()
@@ -378,7 +378,7 @@ class OfreserOrdenDeTrabajo(models.Model):
 
         return res
 
-    @api.multi
+    #@api.multi
     def unlink(self):
         # import pdb; pdb.set_trace()
         for record in self:
@@ -403,13 +403,13 @@ class OfreserOrdenDeTrabajo(models.Model):
     ######################################################
     # COMPUTES
     ######################################################
-    @api.one
+    #@api.one
     @api.depends('tipos_de_trabajo_ids')
     def _compute_porcentaje_maximo_mo(self):
         if self.tipos_de_trabajo_ids:
             self.maximo_porcentaje_mano_de_obra = min([tipo.porcentaje_maximo_mano_obra for tipo in self.tipos_de_trabajo_ids])
 
-    @api.one
+    #@api.one
     @api.depends('tipos_de_trabajo_ids')
     def _compute_porcentaje_maximo_prom(self):
         if self.tipos_de_trabajo_ids:
@@ -418,17 +418,17 @@ class OfreserOrdenDeTrabajo(models.Model):
     ######################################################
     # ACTIONS
     ######################################################
-    @api.multi
+    #@api.multi
     def registrar_pago_orden(self):
         """Marca que la orden esta pagada, para ser llamada desde la vista tree"""
         for rec in self:
             rec.pagado = 'si'
 
-    @api.multi
+    #@api.multi
     def iniciar_orden_de_trabajo(self):
         self.estado = 'en_proceso'
 
-    @api.multi
+    #@api.multi
     def send_mail(self):
         # TODO: cambiar user_id por user_ids segun los operarios
         # que participen en el trabajo
@@ -468,7 +468,7 @@ class OfreserOrdenDeTrabajo(models.Model):
             subtype="mt_comment",
             **mail_details)
 
-    @api.multi
+    #@api.multi
     def finalizar_orden_de_trabajo(self):
         """Se llama al finalizar la orden de trabajo
 
@@ -538,15 +538,15 @@ class OfreserOrdenDeTrabajo(models.Model):
         if self.usa_certificado:
             self.certificado_id.estado = 'usado'
 
-    @api.multi
+    #@api.multi
     def reprogramar_orden_de_trabajo(self):
         self.estado = 'reprogramar'
 
-    @api.multi
+    #@api.multi
     def cancelar_orden_de_trabajo(self):
         self.estado = 'cancelado'
 
-    @api.multi
+    #@api.multi
     def see_liquidacion(self):
         res_id = self.env['ofreser.liquidacion'].search(
             [('orden_de_trabajo_id', '=', self.id)]
@@ -565,7 +565,7 @@ class OfreserOrdenDeTrabajo(models.Model):
             'context': context
         }
 
-    @api.multi
+    #@api.multi
     def a_espera_orden_de_trabajo(self):
         self.estado = 'en_espera'
 
@@ -666,17 +666,17 @@ class OfreserOrdenDeTrabajo(models.Model):
             tipos += u'{}/'.format(tipo.name)
         return tipos
 
-    @api.multi
+    #@api.multi
     def actualizar_partner_email(self, partner_id, email):
         partner = self.env['res.partner'].search([('id', '=', partner_id)])
         partner.write({'email': email})
 
-    @api.multi
+    #@api.multi
     def actualizar_partner_cuit(self, partner_id, cuit):
         partner = self.env['res.partner'].search([('id', '=', partner_id)])
         partner.write({'cuit': cuit})
 
-    @api.multi
+    #@api.multi
     def set_certificado(self):
         certificados_anteriores = self.env['ofreser.certificado'].search([('orden_de_trabajo_id', '=', self.id)])
         if certificados_anteriores:

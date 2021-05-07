@@ -138,7 +138,7 @@ class LiquidacionEnLote(models.Model):
     ##################################################
     # ACTIONS
     ##################################################
-    @api.multi
+    #@api.multi
     def imprimir(self):
         return self.env['report'].get_action(self, 'devoo_ofreser.liquidacion_en_lote')
 
@@ -183,7 +183,7 @@ class LiquidacionEnLote(models.Model):
 
             self.detalle_liquidacion_ids = None
 
-    @api.multi
+    #@api.multi
     def actualizar_valores(self):
         self.detalle_liquidacion_ids = None
         search_params = [('liquidado', '=', False)]

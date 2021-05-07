@@ -16,7 +16,7 @@ class ResPartner(models.Model):
         string='Trabajos Realizados'
     )
 
-    @api.multi
+    #@api.multi
     def name_get(self):
         if self.env.context.get('with_address'):
             result = []

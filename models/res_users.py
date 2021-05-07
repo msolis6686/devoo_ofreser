@@ -7,7 +7,7 @@ class ResUsers(models.Model):
     _name = 'res.users'
     _inherit = 'res.users'
 
-    @api.multi
+    #@api.multi
     def action_get_attachment_tree_view(self):
         # model, action_id = self.env['ir.model.data'].get_object_reference('base', 'action_attachment')
         # print('model',model,'action_id',action_id)
@@ -27,7 +27,7 @@ class ResUsers(models.Model):
                             'default_res_id': self.id}
                 }
 
-    @api.one
+    #@api.one
     def _get_attachment_number(self):
         print('self', self)
         print('self', self.ids)

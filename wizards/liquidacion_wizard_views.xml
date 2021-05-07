@@ -62,7 +62,7 @@
             <field name="name">Liquidación en Lote</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">ofreser.liquidacion_wizard</field>
-            <field name="view_type">form</field>
+            
             <field name="view_mode">form</field>
         </record>
 

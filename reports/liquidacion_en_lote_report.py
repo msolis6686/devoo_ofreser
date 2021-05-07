@@ -9,7 +9,7 @@ class LiquidacionEnLoteReport(models.AbstractModel):
 
     _name = 'report.ofreser.liquidacion_en_lote'
 
-    @api.multi
+    #@api.multi
     def render_html(self, docids, data=None):
         report_obj = self.env['report']
         report = report_obj._get_report_from_name('devoo_ofreser.liquidacion_en_lote')

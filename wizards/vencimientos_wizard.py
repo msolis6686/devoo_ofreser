@@ -68,7 +68,7 @@ class OfreserVencimientosWizard(models.TransientModel):
                 ordenes_vencimiento.append((0, 0, vals))
             self.orden_de_trabajo_ids = ordenes_vencimiento
 
-    @api.multi
+    #@api.multi
     def action_imprimir(self):
         return self.env['report'].get_action(self, 'devoo_ofreser.vencimientos_print')
         pass

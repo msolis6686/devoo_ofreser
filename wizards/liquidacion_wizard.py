@@ -112,7 +112,7 @@ class LiquidacionDetalle(models.Model):
     ##################################################
     # COMPUTES
     ##################################################
-    @api.one
+    #@api.one
     def _compute_tipo_de_trabajos_ids(self):
         tipos = [tipo for tipo in self.orden_de_trabajo_id.tipos_de_trabajo_ids]
         tipos_de_trabajo = ''

@@ -65,7 +65,7 @@
             <field name="name">Liquidación</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">ofreser.liquidacion</field>
-            <field name="view_type">form</field>
+            
             <field name="view_mode">tree,form</field>
         </record>
 
@@ -91,8 +91,8 @@
           </field>
       </record>
 
-      <record model="ir.ui.view" id="ofreser_mano_de_obra_liquidacion_search_view">
-        <field name="name">ofreser.mano_de_obra_liquidacion_form_view</field>
+      <!-- <record id="ofreser_mano_de_obra_liquidacion_search_view" model="ir.ui.view">
+        <field name="name">ofreser.mano_de_obra_liquidacion_search_view</field>
         <field name="model">ofreser.mano_de_obra_liquidacion</field>
         <field name="priority" eval="14"/>
         <field name="arch" type="xml">
@@ -104,7 +104,7 @@
             <filter string="Operador" context="{'group_by':'empleado_id'}"/>
           </search>
         </field>
-      </record>
+      </record> -->
 
       <record id="ofreser_mano_de_obra_liquidacion_tree_view" model="ir.ui.view">
         <field name="name">ofreser.mano_de_obra_liquidacion_tree_view</field>
@@ -131,7 +131,7 @@
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">ofreser.mano_de_obra_liquidacion</field>
         <field name="context">{"search_default_sin_liquidar":1}</field>
-        <field name="view_type">form</field>
+        
         <field name="view_mode">tree</field>
     </record>
 
@@ -145,7 +145,7 @@
 
     <!-- VISTAS DE LIQUIDACIONES EN LOTE -->
     <!-- VISTA SEARCH -->
-    <record model="ir.ui.view" id="ofreser_liquidacion_en_lote_search_view">
+    <!-- <record model="ir.ui.view" id="ofreser_liquidacion_en_lote_search_view">
       <field name="name">ofreser.liquidacion_en_lote_form_view</field>
       <field name="model">ofreser.liquidacion_en_lote</field>
       <field name="priority" eval="14"/>
@@ -155,7 +155,7 @@
           <filter string="Liquidadas" name="liquidada" domain="[('liquidada','=',True)]"/>
         </search>
       </field>
-    </record>
+    </record> -->
 
     <!-- VISTA FORM -->
     <record id="ofreser_liquidacion_en_lote_form_view" model="ir.ui.view">
@@ -247,7 +247,7 @@
         <field name="name">Liquidación en Lote</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">ofreser.liquidacion_en_lote</field>
-        <field name="view_type">form</field>
+        
         <field name="view_mode">tree,form</field>
     </record>
 

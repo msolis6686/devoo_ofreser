@@ -65,7 +65,7 @@
             <field name="name">Liquidación</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">ofreser.liquidacion</field>
-            <field name="view_type">form</field>
+            
             <field name="view_mode">tree,form</field>
         </record>
 
@@ -131,7 +131,7 @@
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">ofreser.mano_de_obra_liquidacion</field>
         <field name="context">{"search_default_sin_liquidar":1}</field>
-        <field name="view_type">form</field>
+        
         <field name="view_mode">tree</field>
     </record>
 
@@ -230,7 +230,7 @@
         <field name="name">Liquidación en Lote</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">ofreser.liquidacion_en_lote</field>
-        <field name="view_type">form</field>
+        
         <field name="view_mode">tree,form</field>
     </record>
 

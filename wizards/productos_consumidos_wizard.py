@@ -28,11 +28,11 @@ class OfreserProductoConsumidoWizard(models.TransientModel):
         string='Unidad'
     )
 
-    @api.multi
+    #@api.multi
     def action_imprimir(self):
         return self.env['report'].get_action(self, 'devoo_ofreser.producto_consumido')
 
-    @api.multi
+    #@api.multi
     def calcular_consumos(self):
         params = []
         params.append(('fecha_servicio', '>=', self.desde)) if self.desde else None

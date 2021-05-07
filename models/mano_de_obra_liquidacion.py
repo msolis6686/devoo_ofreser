@@ -76,7 +76,7 @@ class ManoDeObraLiquidacion(models.Model):
     ##################################################
     # ORM OVERRIDES
     ##################################################
-    @api.multi
+    #@api.multi
     def write(self, vals):
         res = super(ManoDeObraLiquidacion, self).write(vals)
         return res

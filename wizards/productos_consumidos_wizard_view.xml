@@ -43,7 +43,6 @@
             <field name="name">producto_consumido</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">ofreser.producto_consumido_wizard</field>
-            <field name="view_type">form</field>
             <field name="view_mode">form</field>
         </record>
 

@@ -1,17 +1,17 @@
 from . import res_users
-import maquina
-import orden_de_trabajo
-import producto_consumido
-import rubro
-import tipo_de_trabajo
-import mano_de_obra_utilizada
-import maquinas_utilizadas
-import promotores
-import porcentajes_extras
-import movilidad_utilizadas
-import liquidacion
-import mano_de_obra_liquidacion
-import fleet
-import res_partner
-import certificados
-import hr_employee
+from . import maquina
+from . import orden_de_trabajo
+from . import producto_consumido
+from . import rubro
+from . import tipo_de_trabajo
+from . import mano_de_obra_utilizada
+from . import maquinas_utilizadas
+from . import promotores
+from . import porcentajes_extras
+from . import movilidad_utilizadas
+from . import liquidacion
+from . import mano_de_obra_liquidacion
+from . import fleet
+from . import res_partner
+from . import certificados
+from . import hr_employee

@@ -6,7 +6,7 @@
           <field name="name">Certificado</field>
           <field name="model">ofreser.certificado</field>
           <field name="arch" type="xml">
-              <search name="Certificado">
+              <search string="Certificado">
                 <!-- BUSQUEDAS -->
                 <field name="numero"/>
                 <field name="orden_de_trabajo_id"/>
@@ -42,7 +42,7 @@
             <field name="name">Certificado</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">ofreser.certificado</field>
-            <field name="view_type">form</field>
+            
             <field name="view_mode">tree</field>
         </record>
 

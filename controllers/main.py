@@ -9,7 +9,8 @@ from openerp.http import request
 
 import base64
 # esto no me esta importando posta
-from cStringIO import StringIO
+#from cStringIO import StringIO
+from io import StringIO
 from werkzeug.utils import redirect
 
 

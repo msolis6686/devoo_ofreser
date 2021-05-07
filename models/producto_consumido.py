@@ -36,7 +36,7 @@ class OfreserProductoConsumido(models.Model):
         res.uom_id = res.product_id.uom_id
         return res
 
-    @api.multi
+    #@api.multi
     def write(self, vals):
         # Añade la uom al registro porque en la vista es read only
         if vals.get('product_id'):
